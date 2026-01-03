@@ -91,3 +91,19 @@
 .register__login-link:hover {
     text-decoration: underline;
 }
+
+/* エラーメッセージ */
+.is-invalid {
+    border: 1px solid #e00; 
+}
+
+.form-error {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #e00;
+}
+
+.error-box  {
+    padding: 12px;
+    border: 1px solid #e00;
+}
