@@ -47,7 +47,7 @@
       </div>
 
       <div class="register__login">
-        <a class="register__login-link" href="#">ログインはこちら</a>
+        <a class="register__login-link" href="/login">ログインはこちら</a>
       </div>
     </form>
   </div>

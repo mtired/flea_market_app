@@ -8,8 +8,7 @@ use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class RegisterController extends Controller
 {
-    // fortify実装後クラスごと消す
-    public function index(Request $request)
+    public function index()
     {
         return view('register');
     }
