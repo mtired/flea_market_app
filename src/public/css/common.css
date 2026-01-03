@@ -1,0 +1,18 @@
+.header {
+    height: 36px;
+    background-color: #000;
+}
+
+.header__inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+}
+
+/* ロゴ画像 */
+.header__logo {
+    height: 20px;
+    width: auto;
+    display: block;
+}
