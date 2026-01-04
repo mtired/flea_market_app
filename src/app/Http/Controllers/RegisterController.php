@@ -12,11 +12,4 @@ class RegisterController extends Controller
     {
         return view('register');
     }
-
-    public function store(RegisterRequest $request, CreatesNewUsers $creator)
-    {
-        $input = $request->safe()->only(['name', 'email', 'password']);
-        $user = $creator->create($input);
-        return redirect('/register');
-    }
 }
