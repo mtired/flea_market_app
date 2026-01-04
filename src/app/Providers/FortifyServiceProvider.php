@@ -13,10 +13,12 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
-use App\Http\Requests\LoginRequest;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Actions\Fortify\ValidateLoginUsingFormRequest;
+use Laravel\Fortify\Actions\AttemptToAuthenticate;
+use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
+use Laravel\Fortify\Actions\CanonicalizeUsername;
+use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
+use Laravel\Fortify\Features;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -39,24 +41,19 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::redirectUserForTwoFactorAuthenticationUsing(RedirectIfTwoFactorAuthenticatable::class);
 
-        Fortify::authenticateUsing(function (Request $request) {
+        Fortify::authenticateThrough(function (Request $request) {
+            dd('authenticateThrough HIT');
+            return array_filter([
+                config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
+                config('fortify.lowercase_usernames') ? CanonicalizeUsername::class : null,
 
-            $loginRequest = app(LoginRequest::class);
+                // ✅ ここで FormRequest の日本語メッセージを先に適用
+                ValidateLoginUsingFormRequest::class,
 
-            Validator::make(
-                $request->all(),
-                $loginRequest->rules(),
-                $loginRequest->messages()
-            )->validate();
-
-            // 認証
-            $user = User::where('email', $request->email)->first();
-
-            if ($user && Hash::check($request->password, $user->password)) {
-                return $user;
-            }
-
-            return null;
+                Features::enabled(Features::twoFactorAuthentication()) ? RedirectIfTwoFactorAuthenticatable::class : null,
+                AttemptToAuthenticate::class,
+                PrepareAuthenticatedSession::class,
+            ]);
         });
 
         RateLimiter::for('login', function (Request $request) {
