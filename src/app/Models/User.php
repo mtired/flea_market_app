@@ -38,8 +38,12 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
-    protected $casts = [
+    /*protected $casts = [
         'email_verified_at' => 'datetime',
+    ];*/
+
+    protected $casts = [
+    'profile_completed_at' => 'datetime',
     ];
 
     public function profile()
