@@ -1,0 +1,295 @@
+.product-detail {
+  background: #ffffff;
+}
+
+.product-detail__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* 上段：画像 + 右カラム */
+.product-detail__top {
+  display: flex;
+  gap: 70px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* 商品画像 */
+.product-detail__image-wrap {
+  width: 600px;
+  height: 600px;
+  flex: 0 0 auto;
+}
+
+.product-detail__image {
+  width: 600px;
+  height: 600px;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+  background: #D9D9D9; /* 画像が無い時の見え方 */
+}
+
+/* 右側 */
+.product-detail__right {
+  width: 570px;
+}
+
+/* 商品名 */
+.product-detail__name {
+  font-size: 45px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 8px;
+}
+
+/* ブランド名 */
+.product-detail__brand {
+  font-size: 20px;
+  font-weight: 400;
+  color: #000000;
+  margin: 0 0 12px;
+}
+
+/* 価格 */
+.product-detail__price {
+  margin: 0 0 10px;
+  color: #000000;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.product-detail__price-yen {
+  font-size: 45px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.product-detail__price-tax {
+  font-size: 30px;
+  font-weight: 400;
+}
+
+/* いいね・コメント */
+.product-detail__meta {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  margin: 0 0 16px;
+}
+
+.product-detail__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-detail__meta-icon {
+  width: 45px;
+  height: 40px;
+  display: block;
+}
+
+.product-detail__meta-icon--comment {
+  width: 40px;
+  height: 40px;
+}
+
+.product-detail__meta-count {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000000;
+}
+
+/* 購入ボタン */
+.product-detail__buy-button {
+  width: 570px;
+  height: 56px;
+  border-radius: 4px;
+  background: #FF5555;
+  color: #FFFFFF;
+  text-decoration: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 26px;
+}
+
+/* セクション */
+.product-detail__section {
+  margin: 0 0 28px;
+}
+
+.product-detail__section-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 14px;
+}
+
+/* 商品説明本文 */
+.product-detail__description {
+  font-size: 24px;
+  font-weight: 400;
+  color: #000000;
+  margin: 0;
+  white-space: pre-line; /* 改行を反映 */
+}
+
+/* 商品情報 */
+.product-detail__info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.product-detail__info-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.product-detail__info-label {
+  width: 130px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.product-detail__info-value {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.product-detail__category-pill {
+  width: 101px;
+  height: 30px;
+  border-radius: 15px;
+  background: #D9D9D9;
+  color: #000000;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.product-detail__info-state {
+  font-size: 20px;
+  font-weight: 400;
+  color: #000000;
+}
+
+/* コメント */
+.product-detail__comments-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #5F5F5F;
+  margin: 0 0 16px;
+}
+
+.product-detail__comments {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.product-detail__comment {
+  width: 100%;
+}
+
+.product-detail__comment-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.product-detail__avatar {
+  width: 70px;
+  height: 70px;
+  background: #D9D9D9;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.product-detail__commenter {
+  font-size: 30px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.product-detail__comment-body {
+  height: 70px;
+  border-radius: 5px;
+  background: #D9D9D9;
+  color: #000000;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 14px;
+  font-size: 20px;
+  font-weight: 300; /* Light */
+  box-sizing: border-box;
+}
+
+/* コメント投稿 */
+.product-detail__section--comment-form {
+  margin-top: 10px;
+}
+
+.product-detail__comment-form-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 12px;
+}
+
+.product-detail__comment-label {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 10px;
+}
+
+.product-detail__comment-textarea {
+  width: 570px;
+  height: 246px;
+  border-radius: 5px;
+  border: 2px solid #5F5F5F;
+  background: #D9D9D9;
+  color: #000000;
+
+  font-size: 20px;
+  font-weight: 300; /* Light */
+  padding: 14px;
+  box-sizing: border-box;
+  resize: none;
+  outline: none;
+}
+
+.product-detail__comment-submit {
+  width: 570px;
+  height: 56px;
+  border-radius: 4px;
+  border: none;
+  background: #FF5555;
+  color: #FFFFFF;
+
+  font-size: 25px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 18px;
+}
