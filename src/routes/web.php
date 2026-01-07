@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
     //Route::get('/mypage/profile', [ProfileEditController::class, 'index']);
     Route::get('/', [TopController::class, 'index']);
     Route::get('/items/{item}', [TopController::class, 'show']);
+    Route::get('/mypage',[ProfileController::class,'index']);
 
 });
 

@@ -1,0 +1,167 @@
+.profile {
+  width: 100%;
+}
+
+.profile__inner {
+  width: 92%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 0 60px;
+}
+
+/* ===============================
+   上段
+================================*/
+.profile__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 10px 0 22px;
+}
+
+.profile__user {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  min-width: 0;
+}
+
+.profile__avatar {
+  width: 150px;
+  height: 150px;
+  background: #D9D9D9;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.profile__name {
+  font-size: 36px;
+  font-weight: 700;
+  color: #000000;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile__edit-btn {
+  width: 310px;
+  height: 59px;
+  border-radius: 10px;
+  border: 2px solid #FF5555;
+  color: #FF5555;
+  background: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* ===============================
+   タブ
+================================*/
+.profile__tabs {
+  display: flex;
+  gap: 60px;
+  align-items: flex-end;
+  margin-top: 8px;
+}
+
+.profile__tab {
+  font-size: 24px;
+  font-weight: 700;
+  color: #5F5F5F;
+  text-decoration: none;
+  padding: 10px 0 14px;
+  position: relative;
+}
+
+.profile__tab.is-active {
+  color: #FF0000;
+}
+
+.profile__tab.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: #FF0000;
+}
+
+/* タブ下の線（全体） */
+.profile__divider {
+  height: 1px;
+  background: #5F5F5F;
+}
+
+/* ===============================
+   商品一覧
+================================*/
+.profile__items {
+  padding-top: 26px;
+}
+
+.profile__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px 48px;
+}
+
+.profile__card {
+  width: 100%;
+}
+
+.profile__item-image {
+  width: 290px;
+  height: 290px;
+  border-radius: 4px;
+  background: #D9D9D9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.profile__item-name {
+  margin-top: 10px;
+  font-size: 25px;
+  font-weight: 400;
+  color: #000000;
+}
+
+/* 画面が狭いとき */
+@media (max-width: 1200px) {
+  .profile__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .profile__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile__edit-btn {
+    width: 100%;
+  }
+
+  .profile__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .profile__item-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+}
