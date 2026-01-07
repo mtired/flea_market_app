@@ -42,7 +42,6 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::redirectUserForTwoFactorAuthenticationUsing(RedirectIfTwoFactorAuthenticatable::class);
 
         Fortify::authenticateThrough(function (Request $request) {
-            dd('authenticateThrough HIT');
             return array_filter([
                 config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
                 config('fortify.lowercase_usernames') ? CanonicalizeUsername::class : null,
