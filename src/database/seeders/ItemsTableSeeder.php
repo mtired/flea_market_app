@@ -26,7 +26,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'name' => 'HDD',
                 'price' => 5000,
                 'brand' => '西芝',
@@ -38,7 +38,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
+                'user_id' => 3,
                 'name' => '玉ねぎ3束',
                 'price' => 300,
                 'brand' => null,
@@ -50,7 +50,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
+                'user_id' => 4,
                 'name' => '革靴',
                 'price' => 4000,
                 'brand' => null,
@@ -62,7 +62,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'name' => 'ノートPC',
                 'price' => 45000,
                 'brand' => null,
@@ -74,7 +74,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
+                'user_id' => 3,
                 'name' => 'マイク',
                 'price' => 8000,
                 'brand' => null,
@@ -86,7 +86,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
+                'user_id' => 4,
                 'name' => 'ショルダーバッグ',
                 'price' => 3500,
                 'brand' => null,
@@ -110,7 +110,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'name' => 'コーヒーミル',
                 'price' => 4000,
                 'brand' => 'Starbacks',
@@ -122,7 +122,7 @@ class ItemsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
+                'user_id' => 3,
                 'name' => 'メイクセット',
                 'price' => 2500,
                 'brand' => null,

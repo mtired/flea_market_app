@@ -10,24 +10,36 @@ class TopController extends Controller
     public function index(Request $request)
     {
         $tab = $request->query('tab', 'recommend');
+        $keyword = $request->query('keyword');
 
-        if ($tab === 'mylist')
-        {
-            // 仮対応 user_id=1
-            $user = User::find(1);
+        // 仮ログインユーザー（後で Auth::id() に置き換える）
+        $loginUserId = 2;
 
-            // 未ログイン対策
-            /*if (!auth()->check()) {
-                return redirect('/login');
-            }*/
+        if ($tab === 'mylist') {
 
-           $products = $user
-                ? $user->likedItems()->latest('items.created_at')->get()
+            $user = User::find($loginUserId);
+
+                        $products = $user
+                ? $user->likedItems()
+                    ->when($keyword, function ($query) use ($keyword) {
+                        // 2. 商品名の部分一致
+                        $query->where('items.name', 'like', "%{$keyword}%");
+                    })
+                    ->latest('items.created_at')
+                    ->get()
                 : collect();
+
         }
-        else
-        {
-            $products = Item::latest()->get();
+        else{
+            // 自分で出品した商品以外を表示
+            $products = Item::query()
+            ->where('user_id', '!=', $loginUserId)
+            ->when($keyword, function ($query) use ($keyword) {
+                // 2. 商品名の部分一致
+                $query->where('name', 'like', "%{$keyword}%");
+            })
+            ->latest()
+            ->get();
         }
 
         return view('top', [

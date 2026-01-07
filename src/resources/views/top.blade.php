@@ -27,7 +27,12 @@
     @foreach ($products as $product)
       <a href="items/{{ $product->id }}" class="item-card">
         <div class="item-card__img">
-          @if($product->image_url)
+          <!-- Sold表示 -->
+          @if($product->status === 1)
+            <div class="item-card__sold">Sold</div>
+          @endif
+          
+          @if($product->image)
             <img
               src="{{ asset($product->image) }}"
               alt="{{ $product->name }}"
