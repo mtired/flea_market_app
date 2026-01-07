@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('email', 255)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password', 255);
-            $table->rememberToken(); // ← 追加
+            $table->rememberToken();
+            $table->timestamp('profile_completed_at')->nullable();
             $table->timestamps();
         });
     }
