@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unique()->constrained()->restrictOnDelete();
-            $table->foreignId('item_id')->unique()->constrained()->restrictOnDelete();
+            $table->foreignId('user_id')->constrained()->restrictOnDelete();
+            $table->foreignId('item_id')->constrained()->restrictOnDelete();
             $table->timestamps();
+
+            $table->unique(['user_id', 'item_id']);
         });
     }
 
