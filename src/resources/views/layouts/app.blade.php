@@ -38,17 +38,18 @@
     {{-- 右側メニュー --}}
     <nav class="header__nav">
       @auth
-        <form action="/logout" method="get">
+        <form action="/logout" method="post">
           @csrf
           <button class="header__nav-text" type="submit">ログアウト</button>
         </form>
+      @endauth
 
         <a href="/mypage" class="header__nav-text">マイページ</a>
 
         <a href="/" class="header__sell-button">
           出品
         </a>
-      @endauth
+      
 
       @guest
         <a href="/login" class="header__nav-text">ログイン</a>
