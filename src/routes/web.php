@@ -33,6 +33,8 @@ Route::get('/mypage/profile', [ProfileEditController::class, 'index']);*/
     Route::get('/mypage',[ProfileController::class,'index']);
 
 });*/
+    Route::get('/', [TopController::class, 'index']);
+    Route::get('/items/{item}', [ProductDetailController::class, 'show']);
 
 /*** 認証のみ必要（プロフィール編集は除外）***/ 
 Route::middleware(['auth'])->group(function () {
@@ -40,9 +42,13 @@ Route::middleware(['auth'])->group(function () {
     // プロフィール編集（初回ログイン時の到達点）
     // [TODO]:プロフィール編集画面作成したらこの処理のみ追加
     //Route::get('/mypage/profile', [ProfileEditController::class, 'index']);
-    Route::get('/', [TopController::class, 'index']);
-    Route::get('/items/{item}', [TopController::class, 'show']);
-
+    Route::post('/items/{item}/comments', [ProductDetailController::class, 'storeComment'])
+    ->middleware('auth')
+    ->name('items.comments.store');
+    Route::post('/items/{item}/like', [ProductDetailController::class, 'toggleLike'])
+    ->middleware('auth')
+    ->name('items.like.toggle');
+    Route::get('/sell', [ProductCreateController::class, 'index']);
 });
 
 /*
