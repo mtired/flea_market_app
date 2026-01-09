@@ -5,24 +5,29 @@
 @endsection
 
 @section('content')
+
 <main class="product-detail">
   <div class="product-detail__inner">
 
     <div class="product-detail__top">
       {{-- 左：商品画像 --}}
       <div class="product-detail__image-wrap">
-        <img
-          class="product-detail__image"
-          src="{{ $item->image_url ?? asset('images/no-image.png') }}"
-          alt="商品画像"
-        >
+        @if($item->image)
+            <img
+              src="{{ asset($item->image) }}"
+              alt="{{ $item->name }}"
+              class="product-detail__image"
+            >
+          @else
+            商品画像
+          @endif
       </div>
 
       {{-- 右：商品情報 --}}
       <div class="product-detail__right">
         <h1 class="product-detail__name">{{ $item->name ?? '商品名がここに入る' }}</h1>
 
-        <p class="product-detail__brand">{{ $item->brand_name ?? 'ブランド名' }}</p>
+        <p class="product-detail__brand">{{ $item->brand ?? 'ブランド名' }}</p>
 
         <p class="product-detail__price">
           <span class="product-detail__price-yen">¥{{ number_format($item->price ?? 47000) }}</span>
@@ -31,23 +36,28 @@
 
         <div class="product-detail__meta">
           {{-- いいね --}}
-          <div class="product-detail__meta-item">
-            <img class="product-detail__meta-icon"
-                 src="{{ asset('images/icon_heart.png') }}"
-                 alt="いいね">
-            <span class="product-detail__meta-count">{{ $likeCount ?? 3 }}</span>
-          </div>
+          <form class="product-detail__meta-like" action="{{ route('items.like.toggle', $item->id) }}" method="post">
+            @csrf
+            <button type="submit" class="like-button">
+              <img
+                class="product-detail__meta-icon"
+                src="{{ asset($isLiked ? 'images/ハートロゴ_ピンク.png' : 'images/ハートロゴ_デフォルト.png') }}"
+                alt="いいね"
+              >
+              <span class="product-detail__meta-count">{{ $item->likes->count() ?? 0 }}</span>
+            </button>
+          </form>
 
           {{-- コメント --}}
           <div class="product-detail__meta-item">
             <img class="product-detail__meta-icon product-detail__meta-icon--comment"
-                 src="{{ asset('images/icon_comment.png') }}"
+                 src="{{ asset('images/ふきだしロゴ.png') }}"
                  alt="コメント">
-            <span class="product-detail__meta-count">{{ $commentCount ?? 1 }}</span>
+            <span class="product-detail__meta-count">{{ $item->comments->count() ?? 0 }}</span>
           </div>
         </div>
 
-        <a class="product-detail__buy-button" href="/">
+        <a class="product-detail__buy-button" href="/sell">
           購入手続きへ
         </a>
 
@@ -55,11 +65,7 @@
         <section class="product-detail__section">
           <h2 class="product-detail__section-title">商品説明</h2>
           <p class="product-detail__description">
-            {{ $item->description ?? 'カラー：グレー
-
-新品
-商品の状態は良好です。傷もありません。
-購入後、即発送いたします。' }}
+            {{ $item->description ?? '未設定' }}
           </p>
         </section>
 
@@ -71,71 +77,95 @@
             <div class="product-detail__info-row">
               <div class="product-detail__info-label">カテゴリー</div>
               <div class="product-detail__info-value">
-                @forelse(($categories ?? ['洋服','メンズ']) as $cat)
-                  <span class="product-detail__category-pill">{{ $cat }}</span>
+                @forelse($item->categories as $category)
+                  <span class="product-detail__category-pill">{{ $category->name }}</span>
                 @empty
+                  <span class="product-detail__category-pill">未設定</span>
                 @endforelse
               </div>
             </div>
 
             <div class="product-detail__info-row">
               <div class="product-detail__info-label">商品の状態</div>
-              <div class="product-detail__info-state">{{ $item->condition ?? '良好' }}</div>
+              <div class="product-detail__info-state">{{ $item->condition->name ?? '未設定' }}</div>
             </div>
           </div>
         </section>
 
         {{-- コメント一覧 --}}
         <section class="product-detail__section">
-          <h2 class="product-detail__comments-title">コメント({{ $commentCount ?? 1 }})</h2>
-
+          <h2 class="product-detail__comments-title">
+            コメント({{ $item->comments->count() }})
+          </h2>
           <div class="product-detail__comments">
-            @forelse(($comments ?? []) as $comment)
+            @forelse($item->comments as $comment)
               <div class="product-detail__comment">
                 <div class="product-detail__comment-head">
-                  <div class="product-detail__avatar"></div>
-                  <div class="product-detail__commenter">{{ $comment->user_name }}</div>
-                </div>
-                <div class="product-detail__comment-body">
-                  {{ $comment->body }}
+                <div class="product-detail__avatar"></div>
+                <div class="product-detail__commenter">
+                  {{ $comment->user?->name ?? '匿名' }}
                 </div>
               </div>
-            @empty
-              {{-- デザイン見本用ダミー --}}
-              <div class="product-detail__comment">
-                <div class="product-detail__comment-head">
-                  <div class="product-detail__avatar"></div>
-                  <div class="product-detail__commenter">admin</div>
-                </div>
-                <div class="product-detail__comment-body">
-                  こちらにコメントが入ります。
-                </div>
+            <div class="product-detail__comment-body">
+              {{ $comment->content }}
+            </div>
+          </div>
+          @empty
+          <div class="product-detail__comment">
+            <div class="product-detail__comment-head">
+              <div class="product-detail__avatar"></div>
+              <div class="product-detail__commenter">---</div>
+            </div>
+              <div class="product-detail__comment-body">
+                コメントはまだありません。
               </div>
-            @endforelse
+          </div>
+          @endforelse
           </div>
         </section>
 
         {{-- コメント投稿 --}}
-        <section class="product-detail__section product-detail__section--comment-form">
-          <form action="/" method="get">  
-            @csrf
-            <label class="product-detail__comment-label" for="comment">商品へのコメント</label>
-            <textarea
-              class="product-detail__comment-textarea"
-              id="comment"
-              name="comment"
-              placeholder=""
-            >{{ old('comment') }}</textarea>
+        {{-- コメント投稿 --}}
+<form
+  @auth
+    action="{{ route('items.comments.store', $item->id) }}"
+    method="post"
+  @endauth
+  class="product-detail__comment-form"
+>
+  @csrf
 
-            <button class="product-detail__comment-submit" type="submit">
-              コメントを送信する
-            </button>
-          </form>
-        </section>
+  <label class="product-detail__comment-label">
+    商品へのコメント
+  </label>
 
+  <textarea class="product-detail__comment-textarea" name="content">{{ old('content') }}</textarea>
+
+  @error('content')
+    <p class="form-error">{{ $message }}</p>
+  @enderror
+
+  {{-- 未ログイン時に出すメッセージ（最初は非表示） --}}
+  @guest
+    <p class="form-error js-comment-guest-msg" style="display:none;">
+      コメントを送信するにはログインが必要です。
+    </p>
+  @endguest
+
+  @auth
+    <button type="submit" class="product-detail__comment-submit">
+      コメントを送信する
+    </button>
+  @endauth
+
+  @guest
+    <button type="button" class="product-detail__comment-submit js-comment-guest-btn">
+      コメントを送信する
+    </button>
+  @endguest
+</form>
       </div>
     </div>
-
   </div>
 </main>
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TopController extends Controller
 {
@@ -12,30 +13,33 @@ class TopController extends Controller
         $tab = $request->query('tab', 'recommend');
         $keyword = $request->query('keyword');
 
-        // 仮ログインユーザー（後で Auth::id() に置き換える）
-        $loginUserId = 2;
+        $loginUserId = Auth::id();
 
         if ($tab === 'mylist') {
-
-            $user = User::find($loginUserId);
-
-                        $products = $user
+            if (Auth::guest()){
+                $products = collect();
+            }
+            else
+            {
+                $user = User::find($loginUserId);
+                $products = $user
                 ? $user->likedItems()
-                    ->when($keyword, function ($query) use ($keyword) {
+                        ->when($keyword, function ($query) use ($keyword) {
                         // 2. 商品名の部分一致
                         $query->where('items.name', 'like', "%{$keyword}%");
                     })
                     ->latest('items.created_at')
                     ->get()
                 : collect();
-
+            }
         }
         else{
-            // 自分で出品した商品以外を表示
             $products = Item::query()
-            ->where('user_id', '!=', $loginUserId)
+            ->when($loginUserId, function ($query) use ($loginUserId) {
+                // ログインしているときだけ自分の商品を除外
+                $query->where('user_id', '!=', $loginUserId);
+            })
             ->when($keyword, function ($query) use ($keyword) {
-                // 2. 商品名の部分一致
                 $query->where('name', 'like', "%{$keyword}%");
             })
             ->latest()

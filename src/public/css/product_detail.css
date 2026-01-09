@@ -21,15 +21,15 @@
   width: 600px;
   height: 600px;
   flex: 0 0 auto;
+  background: #D9D9D9; /* 画像が無い時用 */
 }
 
 .product-detail__image {
-  width: 600px;
-  height: 600px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
   border-radius: 4px;
-  object-fit: cover;
   display: block;
-  background: #D9D9D9; /* 画像が無い時の見え方 */
 }
 
 /* 右側 */
@@ -76,32 +76,70 @@
 /* いいね・コメント */
 .product-detail__meta {
   display: flex;
-  gap: 22px;
-  align-items: center;
+  gap: 50px;
+  align-items: flex-start;
   margin: 0 0 16px;
+  margin-left: 40px;
 }
 
+/* form / div を同じ見た目にする */
+.product-detail__meta-like,
 .product-detail__meta-item {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;   /* ← 縦並び */
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 4px;
 }
 
+/* いいねボタンのデフォルト装飾を完全に消す */
+.like-button {
+  display: flex;
+  flex-direction: column;   /* ← 縦並び */
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+
+  cursor: pointer;
+}
+
+/* いいねだけ少し広げる */
+.product-detail__meta-like .like-button {
+  gap: 4px;   /* ← コメントより少し広め */
+}
+
+/* フォーカス時の変な枠を消す */
+.like-button:focus {
+  outline: none;
+}
+
+.like-button::-moz-focus-inner {
+  border: 0;
+}
+
+/* アイコン */
 .product-detail__meta-icon {
-  width: 45px;
+  width: 40px;
   height: 40px;
   display: block;
 }
 
-.product-detail__meta-icon--comment {
-  width: 40px;
-  height: 40px;
-}
-
+/* カウント */
 .product-detail__meta-count {
+  font-family: inherit;   /* 親と同じフォント */
   font-size: 18px;
   font-weight: 700;
-  color: #000000;
+  line-height: 1;
+  letter-spacing: 0;
 }
 
 /* 購入ボタン */
@@ -170,8 +208,8 @@
 }
 
 .product-detail__category-pill {
-  width: 101px;
   height: 30px;
+  padding: 0 12px;        /* 余白*/
   border-radius: 15px;
   background: #D9D9D9;
   color: #000000;
@@ -182,6 +220,10 @@
 
   font-size: 20px;
   font-weight: 400;
+
+  max-width: 100%;        /* はみ出し防止 */
+  box-sizing: border-box;
+  white-space: nowrap;    /* 1行にしたい場合 */
 }
 
 .product-detail__info-state {
@@ -230,18 +272,23 @@
 }
 
 .product-detail__comment-body {
-  height: 70px;
+  width: 100%;
+  max-width: 570px;
+
+  height: auto;
+  min-height: 0;
+
+  padding: 20px 14px;
   border-radius: 5px;
   background: #D9D9D9;
   color: #000000;
 
-  display: flex;
-  align-items: center;
-
-  padding: 0 14px;
   font-size: 20px;
-  font-weight: 300; /* Light */
+  font-weight: 300;
+  line-height: 1.4;
+
   box-sizing: border-box;
+
 }
 
 /* コメント投稿 */
@@ -269,7 +316,7 @@
   height: 246px;
   border-radius: 5px;
   border: 2px solid #5F5F5F;
-  background: #D9D9D9;
+  background: #FFFFFF;
   color: #000000;
 
   font-size: 20px;
@@ -292,4 +339,13 @@
   font-weight: 700;
   cursor: pointer;
   margin-top: 18px;
+}
+
+/* エラーメッセージ */
+.form-error {
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #FF5555;
+  line-height: 1.4;
 }
