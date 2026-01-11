@@ -12,13 +12,11 @@ class ValidateLoginUsingFormRequest
 {
     public function __invoke(Request $request, Closure $next)
     {
-        dd('ValidateLoginUsingFormRequest HIT');
         $form = app(LoginRequest::class);
 
         Validator::make(
             $request->all(),
             $form->rules(),
-            $form->messages()
         )->validate();
 
         return $next($request);

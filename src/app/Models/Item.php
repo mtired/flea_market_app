@@ -11,6 +11,7 @@ class Item extends Model
 
     protected $fillable = [
         'name',
+        'user_id',
         'image',
         'status',
         'brand',
@@ -31,6 +32,12 @@ class Item extends Model
     public function likes()
     {
         return $this->hasMany(Like::class);
+    }
+
+    public function likedUsers()
+    {
+        return $this->belongsToMany(User::class, 'likes', 'item_id', 'user_id')
+            ->withTimestamps();
     }
 
     public function comments()

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('image', 255);
             $table->foreignId('condition_id')->constrained()->restrictOnDelete();
             $table->tinyInteger('status');
-            $table->string('brand');
+            $table->string('brand')->nullable();
             $table->string('description');
             $table->unsignedBigInteger('price');
             $table->timestamps();
