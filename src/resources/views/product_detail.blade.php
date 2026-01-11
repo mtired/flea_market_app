@@ -18,9 +18,9 @@
               alt="{{ $item->name }}"
               class="product-detail__image"
             >
-          @else
+        @else
             商品画像
-          @endif
+        @endif
       </div>
 
       {{-- 右：商品情報 --}}
@@ -125,45 +125,24 @@
         </section>
 
         {{-- コメント投稿 --}}
-        {{-- コメント投稿 --}}
-<form
-  @auth
-    action="{{ route('items.comments.store', $item->id) }}"
-    method="post"
-  @endauth
-  class="product-detail__comment-form"
->
-  @csrf
+        @auth
+        <form action="{{ route('items.comments.store', $item->id) }}" method="post">
+          @csrf
 
-  <label class="product-detail__comment-label">
-    商品へのコメント
-  </label>
+          <label class="product-detail__comment-label">
+            商品へのコメント
+          </label>
 
-  <textarea class="product-detail__comment-textarea" name="content">{{ old('content') }}</textarea>
+          <textarea class="product-detail__comment-textarea" name="content">{{ old('content') }}</textarea>
 
-  @error('content')
-    <p class="form-error">{{ $message }}</p>
-  @enderror
-
-  {{-- 未ログイン時に出すメッセージ（最初は非表示） --}}
-  @guest
-    <p class="form-error js-comment-guest-msg" style="display:none;">
-      コメントを送信するにはログインが必要です。
-    </p>
-  @endguest
-
-  @auth
-    <button type="submit" class="product-detail__comment-submit">
-      コメントを送信する
-    </button>
-  @endauth
-
-  @guest
-    <button type="button" class="product-detail__comment-submit js-comment-guest-btn">
-      コメントを送信する
-    </button>
-  @endguest
-</form>
+          @error('content')
+            <p class="form-error">{{ $message }}</p>
+          @enderror
+          <button type="submit" class="product-detail__comment-submit">
+            コメントを送信する
+          </button>
+        </form>
+        @endauth
       </div>
     </div>
   </div>
