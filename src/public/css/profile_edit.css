@@ -1,74 +1,102 @@
+/* ================
+  Profile Edit
+================ */
 .profile-edit {
-  width: 100%;
-  background: #ffffff;
+  padding: 60px 0 80px;
 }
 
 .profile-edit__inner {
-  width: 100%;
-  max-width: 720px;
+  width: 680px;
   margin: 0 auto;
-  padding: 40px 24px 80px;
 }
 
 .profile-edit__title {
+  text-align: center;
   font-size: 36px;
   font-weight: 700;
+  line-height: 47px;
   color: #000000;
-  line-height: 47px; /* 高さ47px */
-  text-align: center;
   margin: 0 0 40px;
 }
 
-/* 画像エリア */
-.profile-edit__image-row {
-  display: flex;
-  justify-content: left;
-  align-items: left;
-  gap: 32px;
-  margin: 0 0 30px;
+/* ================
+  Form Layout
+================ */
+.profile-edit__form {
+  width: 100%;
 }
 
-.profile-edit__image-circle {
-  width: 150px;
-  height: 150px;
-  background: #D9D9D9;
-  border-radius: 50%;
-  overflow: hidden;
-  flex: 0 0 auto;
+.profile-edit__image-row {
   display: flex;
+  justify-content:left;
   align-items: center;
-  justify-content: center;
+  gap: 28px;
+  margin: 0 0 34px;
 }
 
 .profile-edit__image {
-  width: 100%;
-  height: 100%;
+  width: 150px;
+  height: 150px;
+  flex: 0 0 150px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile-edit__image-placeholder {
+  width: 150px;
+  height: 150px;
+  background: #d9d9d9;
+  border-radius: 50%;
+}
+
+.profile-edit__image-preview {
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   display: block;
 }
 
-/* 画像選択ボタン（labelをボタン化） */
-.profile-edit__image-button {
+.is-hidden {
+  display: none !important;
+}
+
+/* file input hide */
+.profile-edit__file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.profile-edit__file-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
   width: 179px;
   height: 49px;
+
   border-radius: 10px;
-  border: 2px solid #FF5555;
-  background: #FF5555;
-  color: #FFFFFF;
-  font-weight: 700;
+  border: 2px solid #ff5555;
+  background: #ffffff;
+
+  color: #ff5555;
   font-size: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  font-weight: 700;
+
   cursor: pointer;
   user-select: none;
 }
 
-.profile-edit__image-input {
-  display: none;
+.profile-edit__file-button:hover {
+  opacity: 0.9;
 }
 
-/* 入力グループ */
+/* ================
+  Inputs
+================ */
 .profile-edit__group {
   width: 100%;
   margin: 0 0 26px;
@@ -79,31 +107,68 @@
   font-size: 24px;
   font-weight: 700;
   color: #000000;
-  text-align: left;
   margin: 0 0 10px;
+  text-align: left;
 }
 
 .profile-edit__input {
   width: 100%;
   height: 55px;
-  border: 1px solid #5F5F5F;
+
+  border: 1px solid #5f5f5f;
   border-radius: 4px;
-  padding: 0 14px;
-  font-size: 16px;
+
+  padding: 0 16px;
+
+  font-size: 24px;
+  font-weight: 400;
+  color: #5f5f5f;
+
   outline: none;
-  box-sizing: border-box;
 }
 
-/* 更新ボタン */
+.profile-edit__input--bold {
+  font-weight: 700;
+}
+
+.profile-edit__input:focus {
+  box-shadow: 0 0 0 2px rgba(255, 85, 85, 0.25);
+  border-color: #ff5555;
+}
+
+/* ================
+  Submit
+================ */
 .profile-edit__submit {
   width: 100%;
   height: 60px;
+
   border: none;
   border-radius: 4px;
-  background: #FF5555;
-  color: #FFFFFF;
+
+  background: #ff5555;
+  color: #ffffff;
+
   font-size: 26px;
   font-weight: 700;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   cursor: pointer;
-  margin-top: 18px;
+  margin-top: 34px;
+}
+
+.profile-edit__submit:hover {
+  opacity: 0.9;
+}
+
+/* ================
+  Error
+================ */
+.profile-edit__error {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #ff5555;
 }
