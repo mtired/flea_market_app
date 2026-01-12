@@ -125,7 +125,6 @@
         </section>
 
         {{-- コメント投稿 --}}
-        @auth
         <form action="{{ route('items.comments.store', $item->id) }}" method="post">
           @csrf
 
@@ -142,7 +141,6 @@
             コメントを送信する
           </button>
         </form>
-        @endauth
       </div>
     </div>
   </div>
