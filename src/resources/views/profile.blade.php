@@ -11,7 +11,11 @@
     {{-- 上段：プロフィール情報 --}}
     <section class="profile__header">
       <div class="profile__user">
-        <div class="profile__avatar" aria-label="プロフィール画像"></div>
+        <div class="profile__avatar">
+          @if(!empty($profile?->image))
+            <img src="{{ asset('storage/' . $profile->image) }}">
+          @endif
+        </div>
         <div class="profile__name">{{ $user->name }}</div>
       </div>
 

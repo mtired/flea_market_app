@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Profile;
 
 class ProfileController extends Controller
 {
@@ -15,6 +16,8 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
+
+        $profile = Profile::where('user_id', $user->id)->first();
 
         $page = request('page', 'sell');
 
@@ -32,6 +35,6 @@ class ProfileController extends Controller
         // タブ切り替え用（?tab=buy / ?tab=sell )
         $items = $page === 'buy' ? $buyItems : $sellItems;
 
-        return view('profile', compact('user', 'items', 'page'));
+        return view('profile', compact('user', 'profile', 'items', 'page'));
     }
 }
