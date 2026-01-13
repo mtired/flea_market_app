@@ -57,7 +57,7 @@
           </div>
         </div>
 
-        <a class="product-detail__buy-button" href="/sell">
+        <a class="product-detail__buy-button" href="{{ route('purchase.show', ['item' => $item->id]) }}">
           購入手続きへ
         </a>
 
