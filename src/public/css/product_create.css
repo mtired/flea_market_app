@@ -1,0 +1,205 @@
+.product-create {
+  padding: 40px 0 80px;
+}
+
+.product-create__inner {
+  width: 680px;
+  margin: 0 auto;
+}
+
+.product-create__title {
+  font-size: 44px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+/* form */
+.product-create__form {
+  width: 100%;
+}
+
+/* blocks */
+.product-create__section {
+  margin-top: 34px;
+}
+
+.product-create__section-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #5F5F5F;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #5F5F5F;
+  margin-bottom: 18px;
+}
+
+.product-create__block {
+  margin-bottom: 20px;
+}
+
+.product-create__label {
+  font-size: 24px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 10px;
+}
+
+/* image area */
+.product-create__image-area {
+  width: 680px;
+  height: 150px;
+  border-radius: 4px;
+  border: 1px dashed #5F5F5F;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.product-create__file-input {
+  display: none;
+}
+
+.product-create__file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 165px;
+  height: 43.46px;
+  border-radius: 10px;
+  border: 2px solid #FF5555;
+  color: #FF5655;
+  font-size: 16px;
+  font-weight: 700;
+  background: transparent;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.product-create__preview {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* categories */
+.product-create__categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 10px;
+}
+
+/* inputは隠す（タグUIにする） */
+.product-create__category-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 未選択（指定どおり） */
+.product-create__category-pill {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 200px;
+  border: 2px solid #FF5655;
+  background: #D9D9D900;
+  color: #FF5655;
+  font-size: 15px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 選択時（赤背景＋白文字） */
+.product-create__category-input:checked + .product-create__category-pill {
+  background: #FF5655;
+  color: #FFFFFF;
+}
+
+/* select / inputs */
+.product-create__select {
+  width: 680px;
+  height: 45px;
+  border-radius: 4px;
+  border: 1px solid #5F5F5F;
+  font-size: 16px;
+  font-weight: 700;
+  color: #5F5F5F;
+  padding: 0 12px;
+  background: #FFFFFF;
+}
+
+.product-create__input {
+  width: 680px;
+  height: 45px;
+  border-radius: 4px;
+  border: 1px solid #5F5F5F;
+  font-size: 16px;
+  padding: 0 12px;
+}
+
+.product-create__textarea {
+  width: 680px;
+  height: 125px;
+  border-radius: 4px;
+  border: 1px solid #5F5F5F;
+  font-size: 16px;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.product-create__price {
+  width: 680px;
+  height: 45px;
+  border-radius: 4px;
+  border: 1px solid #5F5F5F;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+}
+
+.product-create__yen {
+  font-size: 24px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.product-create__price-input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 24px;
+  font-weight: 700;
+  color: #5F5F5F;
+}
+
+/* submit */
+.product-create__submit {
+  width: 680px;
+  height: 60px;
+  border: none;
+  border-radius: 5px;
+  background: #FF5555;
+  color: #FFFFFF;
+  font-size: 26px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 18px;
+}
+
+/* error (既存の共通があるなら削ってOK) */
+.form-error {
+  margin-top: 8px;
+  color: #ff3333;
+  font-size: 14px;
+}

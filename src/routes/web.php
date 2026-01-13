@@ -37,8 +37,8 @@ Route::get('/mypage/profile', [ProfileEditController::class, 'index']);*/
     Route::get('/', [TopController::class, 'index'])->name('top');
     Route::get('/items/{item}', [ProductDetailController::class, 'show']);
     
-/*** 認証のみ必要（プロフィール編集は除外）***/ 
-Route::middleware(['auth'])->group(function () {
+    /*** 認証のみ必要（プロフィール編集は除外）***/ 
+    Route::middleware(['auth'])->group(function () {
 
     // プロフィール編集（初回ログイン時の到達点）
     // [TODO]:プロフィール編集画面作成したらこの処理のみ追加
@@ -78,6 +78,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/purchase/address/{item}', [AddressEditController::class, 'update'])
         ->name('purchase.address.update');
 
+    // 出品画面表示
+    Route::get('/sell', [ProductCreateController::class, 'create'])->name('items.create');
+
+    // 出品処理
+    Route::post('/sell', [ProductCreateController::class, 'store'])->name('items.store');
 });
 
 /*
