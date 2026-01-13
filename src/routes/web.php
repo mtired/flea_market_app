@@ -34,8 +34,9 @@ Route::get('/mypage/profile', [ProfileEditController::class, 'index']);*/
 
 });*/
     Route::get('/', [TopController::class, 'index']);
+    Route::get('/', [TopController::class, 'index'])->name('top');
     Route::get('/items/{item}', [ProductDetailController::class, 'show']);
-
+    
 /*** 認証のみ必要（プロフィール編集は除外）***/ 
 Route::middleware(['auth'])->group(function () {
 
@@ -45,10 +46,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/items/{item}/comments', [ProductDetailController::class, 'storeComment'])
     ->middleware('auth')
     ->name('items.comments.store');
+    
     Route::post('/items/{item}/like', [ProductDetailController::class, 'toggleLike'])
     ->middleware('auth')
     ->name('items.like.toggle');
-    Route::get('/sell', [PurchaseController::class, 'index']);
+
     Route::get('/mypage', [ProfileController::class, 'show'])
     ->middleware('auth')
     ->name('mypage');
@@ -68,12 +70,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
         ->name('purchase.store');
 
-    // 住所変更画面（表示）
-    Route::get('/purchase/address', [AddressEditController::class, 'show'])
-        ->name('purchase.address');
+    // 住所変更画面表示
+    Route::get('/purchase/address/{item}', [AddressEditController::class, 'edit'])
+        ->name('purchase.address.edit');
 
-    // 住所変更（更新）
-    Route::post('/purchase/address', [AddressEditController::class, 'update'])
+    // 住所更新処理
+    Route::put('/purchase/address/{item}', [AddressEditController::class, 'update'])
         ->name('purchase.address.update');
 
 });

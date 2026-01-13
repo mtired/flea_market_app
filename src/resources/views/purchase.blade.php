@@ -35,10 +35,8 @@
         <p class="purchase__block-title">支払い方法</p>
 
         <select class="purchase__select" name="payment_method" form="purchase-form" required>
-          <option value="" selected disabled>選択してください</option>
-          <option value="convenience">コンビニ払い</option>
-          <option value="card">カード払い</option>
-          <option value="bank">銀行振込</option>
+            <option value="convenience">コンビニ払い</option>
+            <option value="card">カード払い</option>
         </select>
       </div>
 
@@ -48,12 +46,18 @@
       <div class="purchase__block">
         <div class="purchase__address-head">
           <p class="purchase__block-title">配送先</p>
-          <a href="{{ route('purchase.address') }}" class="purchase__address-link">変更する</a>
-        </div>
+            <a
+                href="{{ route('purchase.address.edit', ['item' => $item->id]) }}"
+                class="purchase__address-link"
+            >
+            変更する
+            </a>
+        </div> 
 
         <div class="purchase__address-body">
           <p class="purchase__address-text">〒 {{ $address->postal_code ?? 'XXX-YYYY' }}</p>
           <p class="purchase__address-text">{{ $address->address ?? 'ここには住所と建物が入ります' }}</p>
+          <p class="purchase__address-text">{{ $address->building ?? '' }}</p>
         </div>
       </div>
 
@@ -94,6 +98,7 @@
       const labelMap = {
         convenience: 'コンビニ払い',
         card: 'カード払い',
+        bank: '銀行振込',
       };
 
       select.addEventListener('change', () => {

@@ -9,11 +9,6 @@ use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
-    public function index()
-    {
-        return view('purchase');
-    }
-
     /**
      * 購入画面表示
      */
@@ -46,7 +41,7 @@ class PurchaseController extends Controller
 
         // 住所がない場合は住所変更へ（要件に合わせて調整OK）
         if (!$address) {
-            return redirect()->route('purchase.address')
+            return redirect()->route('purchase.address.edit', ['item' => $item->id])
                 ->with('error', '配送先住所を登録してください');
         }
 
@@ -65,8 +60,10 @@ class PurchaseController extends Controller
 
         // 在庫・購入済みフラグなどがあるならここで更新
         // $item->update(['is_sold' => true]);
+        $item->update(['status' => 1]);
 
-        return redirect()->route('purchase.show', $item->id)
+        return redirect()
+            ->route('top') // トップのルート名に合わせて
             ->with('success', '購入が完了しました');
     }
 }

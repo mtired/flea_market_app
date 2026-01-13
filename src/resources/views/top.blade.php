@@ -6,6 +6,7 @@
 
 @section('content')
 <section class="items">
+
   {{-- タブ --}}
   <div class="items__tabs">
     <a
