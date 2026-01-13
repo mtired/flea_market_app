@@ -59,6 +59,23 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/mypage/profile', [ProfileEditController::class, 'update'])
         ->name('profile.update');
 
+    
+    // 購入画面表示
+    Route::get('/purchase/{item}', [PurchaseController::class, 'show'])
+        ->name('purchase.show');
+
+    // 購入処理（注文作成など）
+    Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
+        ->name('purchase.store');
+
+    // 住所変更画面（表示）
+    Route::get('/purchase/address', [AddressEditController::class, 'show'])
+        ->name('purchase.address');
+
+    // 住所変更（更新）
+    Route::post('/purchase/address', [AddressEditController::class, 'update'])
+        ->name('purchase.address.update');
+
 });
 
 /*
