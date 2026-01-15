@@ -46,7 +46,7 @@
 
         <a href="/mypage" class="header__nav-text">マイページ</a>
 
-        <a href="/" class="header__sell-button">
+        <a href="/sell" class="header__sell-button">
           出品
         </a>
       
