@@ -21,11 +21,11 @@
       {{-- 画像 --}}
       <div class="profile-edit__image-row">
         <div class="profile-edit__image">
-          @if(!empty($profile?->image))
+          @if(!empty($profile?->image_url))
             <img
               id="jsProfilePreview"
               class="profile-edit__image-preview"
-              src="{{ asset('storage/' . $profile->image) }}"
+              src="{{ asset('storage/' . $profile->image_url) }}"
               alt="プロフィール画像"
             >
           @else

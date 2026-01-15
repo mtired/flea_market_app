@@ -33,9 +33,9 @@
             <div class="item-card__sold">Sold</div>
           @endif
           
-          @if($product->image)
+          @if($product->image_url)
             <img
-              src="{{ asset($product->image) }}"
+              src="{{ asset($product->image_url) }}"
               alt="{{ $product->name }}"
             >
           @else

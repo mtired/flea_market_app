@@ -41,12 +41,15 @@
     <section class="profile__items">
       <div class="profile__grid">
         @forelse ($items as $item)
-          <article class="profile__card">
+        <article class="profile__card">
+          <a href="{{ route('items.show', $item->id) }}">
             <div class="profile__item-image">
-              <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
+              <img src="{{ asset($item->image_url) }}" alt="{{ $item->name }}">
             </div>
-            <p class="profile__item-name">{{ $item->name }}</p>
-          </article>
+          </a>
+
+          <p class="profile__item-name">{{ $item->name }}</p>
+        </article>
         @empty
           <p class="profile__empty">
             {{ $page === 'buy' ? '購入した商品はありません' : '出品した商品はありません' }}
