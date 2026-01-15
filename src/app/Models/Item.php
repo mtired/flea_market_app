@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Item extends Model
 {
@@ -54,5 +56,17 @@ class Item extends Model
     public function order()
     {
         return $this->hasOne(Order::class);
+    }
+
+    public function getImageUrlAttribute(): string
+    {
+        $image = $this->image ?? '';
+
+        if (Str::startsWith($image, ['http://', 'https://'])) {
+            return $image; // AWSなどのフルURL
+        }
+
+        // storage（public disk）想定: item_images/xxx.jpg
+        return Storage::url($image); // => /storage/item_images/xxx.jpg
     }
 }
