@@ -34,7 +34,6 @@ class ProductCreateController extends Controller
 
         $item = Item::create([
             'user_id'       => Auth::id(),
-            'category_id'   => $validated['category_id'],
             'condition_id'  => $validated['condition_id'],
             'name'          => $validated['name'],
             'brand'         => $validated['brand'] ?? null,
@@ -44,7 +43,11 @@ class ProductCreateController extends Controller
             'status'        => 0
         ]);
 
+        // カテゴリ（複数）を紐付け
+        // Request側は category_ids[] の配列になっている想定
+        $item->categories()->sync($validated['category_ids']);
+        
         // 商品詳細へ（ルート名はあなたの環境に合わせて）
-        return redirect()->route('items.show', ['item' => $item->id]);
+        return redirect()->route('items.show', $item->id);
     }
 }

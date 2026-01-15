@@ -35,7 +35,7 @@ Route::get('/mypage/profile', [ProfileEditController::class, 'index']);*/
 });*/
     Route::get('/', [TopController::class, 'index']);
     Route::get('/', [TopController::class, 'index'])->name('top');
-    Route::get('/items/{item}', [ProductDetailController::class, 'show']);
+    Route::get('/items/{item}', [ProductDetailController::class, 'show'])->name('items.show');;
     
     /*** 認証のみ必要（プロフィール編集は除外）***/ 
     Route::middleware(['auth'])->group(function () {

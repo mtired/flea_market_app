@@ -79,7 +79,7 @@
             @endforeach
         </select>
 
-          @error('condition')
+          @error('condition_id')
             <p class="form-error">{{ $message }}</p>
           @enderror
         </div>
