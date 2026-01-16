@@ -14,7 +14,7 @@
       <div class="product-detail__image-wrap">
         @if($item->image)
             <img
-              src="{{ asset($item->image) }}"
+              src="{{ $item->image_url }}"
               alt="{{ $item->name }}"
               class="product-detail__image"
             >
@@ -30,7 +30,7 @@
         <p class="product-detail__brand">{{ $item->brand ?? 'ブランド名' }}</p>
 
         <p class="product-detail__price">
-          <span class="product-detail__price-yen">¥{{ number_format($item->price ?? 47000) }}</span>
+          <span class="product-detail__price-yen">¥{{ number_format($item->price ?? 0) }}</span>
           <span class="product-detail__price-tax">(税込)</span>
         </p>
 

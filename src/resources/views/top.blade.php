@@ -24,29 +24,47 @@
   </div>
 
   {{-- 商品一覧 --}}
-  <div class="items__grid">
-    @foreach ($products as $product)
-      <a href="items/{{ $product->id }}" class="item-card">
+<div class="items__grid">
+  @foreach ($products as $product)
+    @if($product->status === 1)
+      {{-- SOLD：リンクなし --}}
+      <div class="item-card">
         <div class="item-card__img">
-          <!-- Sold表示 -->
-          @if($product->status === 1)
-            <div class="item-card__sold">Sold</div>
-          @endif
-          
+          <div class="item-card__sold">Sold</div>
+
           @if($product->image_url)
             <img
-              src="{{ asset($product->image_url) }}"
+              src="{{ $product->image_url }}"
               alt="{{ $product->name }}"
+              class="product-detail__image"
             >
           @else
             商品画像
           @endif
         </div>
-        <p class="item-card__name">
-          {{ $product->name }}
-        </p>
+
+        <p class="item-card__name">{{ $product->name }}</p>
+      </div>
+    @else
+      {{-- 未SOLD：リンクあり（画像クリックで詳細へ） --}}
+      <a href="{{ route('items.show', ['item' => $product->id]) }}" class="item-card">
+        <div class="item-card__img">
+          @if($product->image_url)
+            <img
+              src="{{ $product->image_url }}"
+              alt="{{ $product->name }}"
+              class="product-detail__image"
+            >
+          @else
+            商品画像
+          @endif
+        </div>
+
+        <p class="item-card__name">{{ $product->name }}</p>
       </a>
-    @endforeach
-  </div>
+    @endif
+
+  @endforeach
+</div>
 </section>
 @endsection
