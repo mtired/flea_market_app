@@ -1,10 +1,15 @@
+/* ===============================
+   全体
+================================*/
 .items {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px 24px 60px;
 }
 
-/* タブ */
+/* ===============================
+   タブ
+================================*/
 .items__tabs {
   display: flex;
   gap: 24px;
@@ -25,7 +30,9 @@
   color: #ff0000;
 }
 
-/* グリッド */
+/* ===============================
+   商品一覧（profile と同じ設計）
+================================*/
 .items__grid {
   margin-top: 48px;
   display: grid;
@@ -33,31 +40,41 @@
   gap: 48px;
 }
 
-/* カード */
+/* ===============================
+   カード
+================================*/
 .item-card {
+  display: block;
   text-decoration: none;
   color: inherit;
 }
 
+/* 画像枠：width100% + max-width290 + 正方形 */
 .item-card__img {
   width: 100%;
   max-width: 290px;
   aspect-ratio: 1 / 1;
-  border-radius: 4px;
   background: #d9d9d9;
+  border-radius: 4px;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  position: relative;
+  overflow: hidden;
 }
 
+/* 画像 */
 .item-card__img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   border-radius: 4px;
 }
 
+/* 商品名 */
 .item-card__name {
   margin-top: 12px;
   font-size: 25px;
@@ -65,11 +82,9 @@
   color: #000;
 }
 
-.item-card__img {
-  position: relative;
-}
-
-/* Sold 表示 */
+/* ===============================
+   SOLD 表示
+================================*/
 .item-card__sold {
   position: absolute;
   top: 12px;
@@ -81,4 +96,28 @@
   font-weight: 700;
   border-radius: 4px;
   z-index: 2;
+}
+
+/* SOLD（リンクなしカード）を少し無効っぽく */
+.item-card:not(a) {
+  cursor: default;
+}
+
+.item-card:not(a) .item-card__img {
+  opacity: 0.6;
+}
+
+/* ===============================
+   レスポンシブ
+================================*/
+@media (max-width: 1200px) {
+  .items__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .items__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
