@@ -37,14 +37,26 @@ Route::middleware('guest')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| ログイン済み
+| ログイン済み（認証誘導画面は未認証でも見ることができるようにするため）
 |--------------------------------------------------------------------------
-| ・初回登録直後は常にプロフィール編集画面へ飛ぶ
-| ・登録後についてもプロフィール変更できるようにしておく
 */
 Route::middleware('auth')->group(function () {
 
-    // プロフィール編集
+    // メール認証誘導画面
+    Route::get('/email/verify', function () {
+        return view('verify_email');
+    })->name('verification.notice');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| ログイン済み + メール認証済み（プロフ設定画面へ繊維）
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    // プロフィール編集（d）
     Route::get('/mypage/profile', [ProfileEditController::class, 'edit'])
         ->name('profile.edit');
 
@@ -52,13 +64,12 @@ Route::middleware('auth')->group(function () {
         ->name('profile.update');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | ログイン済み + プロフィール完了必須
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'profile.completed'])->group(function () {
+Route::middleware(['auth', 'profile.completed', 'verified'])->group(function () {
 
     // マイページ
     Route::get('/mypage', [ProfileController::class, 'show'])
