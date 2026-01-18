@@ -35,7 +35,7 @@
         <p class="purchase__block-title">支払い方法</p>
 
         <select class="purchase__select" name="payment_method" form="purchase-form" required>
-            <option value="convenience">コンビニ払い</option>
+            <option value="konbini">コンビニ払い</option>
             <option value="card">カード払い</option>
         </select>
       </div>
@@ -88,23 +88,5 @@
     </aside>
 
   </div>
-
-  <script>
-    (function () {
-      const select = document.querySelector('.purchase__select');
-      const preview = document.getElementById('payment-preview');
-      if (!select || !preview) return;
-
-      const labelMap = {
-        convenience: 'コンビニ払い',
-        card: 'カード払い',
-        bank: '銀行振込',
-      };
-
-      select.addEventListener('change', () => {
-        preview.textContent = labelMap[select.value] ?? '---';
-      });
-    })();
-  </script>
 </main>
 @endsection
