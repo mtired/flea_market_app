@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Profile;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProfileEditRequest;
 use Symfony\Component\HttpKernel\Profiler\Profile as ProfilerProfile;
 
@@ -47,17 +48,32 @@ class ProfileEditController extends Controller
             $imagePath = $request->file('image')->store('profile_images', 'public');
         }
 
+        // プロフィール完成条件
+        $isCompleted =
+            !empty($validated['postal_code']) &&
+            !empty($validated['address']);
+
+        // 「初回登録時のみ」profile_completed_at を入力
+        $alreadyCompleted = !is_null($existing?->profile_completed_at);
+
+
+        $data = [
+            'postal_code' => $validated['postal_code'],
+            'address'     => $validated['address'],
+            'building'    => $validated['building'] ?? null,
+            'image'       => $validated['image'] ?? null
+        ];
+
+        if ($isCompleted && !$alreadyCompleted) {
+            $data['profile_completed_at'] = now();
+        }
+
         // profiles テーブル（初回は作成、2回目以降は更新）
         Profile::updateOrCreate(
             ['user_id' => $user->id],
-            [
-                'postal_code' => $validated['postal_code'],
-                'address'     => $validated['address'],
-                'building'    => $validated['building'] ?? null,
-                'image'       => $imagePath, // ★ NOT NULL なので初回は必須にするのが安全
-            ]
+            $data
         );
 
-        return redirect('/')->with('status', 'プロフィールを更新しました');
+        return redirect()->intended(route('mypage'))->with('status', 'プロフィールを更新しました');
     }
 }
