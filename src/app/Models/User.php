@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Item;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -44,7 +44,7 @@ class User extends Authenticatable
     ];*/
 
     protected $casts = [
-    'profile_completed_at' => 'datetime',
+        'profile_completed_at' => 'datetime',
     ];
 
     public function profile()

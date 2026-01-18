@@ -37,30 +37,38 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // ✅ 登録後：必ずプロフィール編集へ
+        // 登録直後は必ず誘導画面へ
         $this->app->singleton(RegisterResponse::class, function () {
             return new class implements RegisterResponse {
                 public function toResponse($request)
                 {
                     $request->session()->forget('url.intended');
-                    return redirect()->route('profile.edit');
+                    return redirect()->route('verification.notice');
                 }
             };
         });
 
-        // ✅ ログイン後：未完了ならプロフィール編集へ、完了済みなら intended/top へ
+        // ログイン後に未認証なら誘導画面へ
         $this->app->singleton(LoginResponse::class, function () {
             return new class implements LoginResponse {
                 public function toResponse($request)
                 {
                     $user = $request->user();
-                    $completed = !is_null(optional($user->profile)->profile_completed_at);
 
-                    if (!$completed) {
+                    // 未認証なら誘導画面へ
+                    if ($user && ! $user->hasVerifiedEmail()) {
+                        $request->session()->forget('url.intended');
+                        return redirect()->route('verification.notice');
+                    }
+
+                    // 認証済みでプロフィール未完了ならプロフィール設定へ
+                    $completed = !is_null(optional($user->profile)->profile_completed_at);
+                    if (! $completed) {
                         $request->session()->forget('url.intended');
                         return redirect()->route('profile.edit');
                     }
 
+                    // それ以外は intended → top
                     return redirect()->intended(route('top'));
                 }
             };
