@@ -19,13 +19,15 @@ use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
 use Laravel\Fortify\Actions\CanonicalizeUsername;
 use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
 use Laravel\Fortify\Features;
+use Laravel\Fortify\Contracts\RegisterResponse;
+use Laravel\Fortify\Contracts\LoginResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
-    public function register(): void
+    public function register()
     {
         //
     }
@@ -35,6 +37,35 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // ✅ 登録後：必ずプロフィール編集へ
+        $this->app->singleton(RegisterResponse::class, function () {
+            return new class implements RegisterResponse {
+                public function toResponse($request)
+                {
+                    $request->session()->forget('url.intended');
+                    return redirect()->route('profile.edit');
+                }
+            };
+        });
+
+        // ✅ ログイン後：未完了ならプロフィール編集へ、完了済みなら intended/top へ
+        $this->app->singleton(LoginResponse::class, function () {
+            return new class implements LoginResponse {
+                public function toResponse($request)
+                {
+                    $user = $request->user();
+                    $completed = !is_null(optional($user->profile)->profile_completed_at);
+
+                    if (!$completed) {
+                        $request->session()->forget('url.intended');
+                        return redirect()->route('profile.edit');
+                    }
+
+                    return redirect()->intended(route('top'));
+                }
+            };
+        });
+
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);

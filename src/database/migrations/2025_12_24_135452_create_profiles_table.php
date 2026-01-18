@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('address', 255);
             $table->string('building', 255)->nullable();
             $table->string('image', 255)->nullable();
+            $table->timestamp('profile_completed_at')->nullable();
             $table->timestamps();
         });
     }
