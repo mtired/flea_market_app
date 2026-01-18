@@ -61,7 +61,7 @@ class ProfileEditController extends Controller
             'postal_code' => $validated['postal_code'],
             'address'     => $validated['address'],
             'building'    => $validated['building'] ?? null,
-            'image'       => $validated['image'] ?? null
+            'image'       => $imagePath,
         ];
 
         if ($isCompleted && !$alreadyCompleted) {
@@ -74,6 +74,6 @@ class ProfileEditController extends Controller
             $data
         );
 
-        return redirect()->intended(route('mypage'))->with('status', 'プロフィールを更新しました');
+        return redirect()->route('mypage')->with('status', 'プロフィールを更新しました');
     }
 }

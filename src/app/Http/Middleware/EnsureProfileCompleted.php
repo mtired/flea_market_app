@@ -17,12 +17,10 @@ class EnsureProfileCompleted
     {
         $user = $request->user();
 
-        // ログイン済み & プロフィール未完了 & プロフィール画面以外 → /mypage/profile
-        if ($user
-            && is_null($user->profile_completed_at)
-            && !$request->is('mypage/profile*')
-        ) {
-            return redirect('/mypage/profile');
+        $completed = $user && !is_null(optional($user->profile)->profile_completed_at);
+
+        if ($user && !$completed && !$request->is('mypage/profile*')) {
+            return redirect()->route('profile.edit');
         }
 
         return $next($request);
