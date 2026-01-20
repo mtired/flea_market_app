@@ -106,3 +106,50 @@
     padding: 12px;
     border: 1px solid #e00;
 }
+
+/* ===============================
+   タブレット（768–850px）
+================================*/
+@media (min-width: 768px) and (max-width: 850px) {
+  .login {
+    padding: 40px 16px;
+  }
+
+  .login__inner {
+    max-width: 620px;
+  }
+
+  .login__title {
+    font-size: 30px;
+    margin-bottom: 28px;
+  }
+
+  .login__label {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .login__group {
+    margin-bottom: 20px;
+  }
+
+  .login__input {
+    height: 52px;
+    font-size: 16px;
+  }
+
+  .login__group:nth-of-type(2) .login__input,
+  .login__group:nth-of-type(4) .login__input {
+    height: 52px;
+  }
+
+  .login__button {
+    height: 56px;
+    font-size: 22px;
+    margin-top: 32px;
+  }
+
+  .login__register-link {
+    font-size: 18px;
+  }
+}

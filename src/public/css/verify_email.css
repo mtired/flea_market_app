@@ -81,8 +81,10 @@
   text-decoration: underline;
 }
 
-/* レスポンシブ：小さい画面で崩れないように */
-@media (max-width: 768px) {
+/* ===============================
+   タブレット（768–850px）
+================================*/
+@media (min-width: 768px) and (max-width: 850px) {
   .verify-email__inner {
     padding-top: 200px;
   }

@@ -205,7 +205,7 @@
   font-weight: 400;
   color: #000000;
   margin: 0;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 /* 購入ボタン */
@@ -228,19 +228,72 @@
 }
 
 /* ===============================
-   レスポンシブ
-================================ */
-@media screen and (max-width: 1000px) {
-  .purchase__inner {
-    flex-direction: column;
-    gap: 40px;
+   タブレット（768–850px）
+   商品代金／支払い方法：幅＆フォントを締める
+================================*/
+@media (min-width: 768px) and (max-width: 850px) {
+  /* 右カラムの幅を細く */
+  .purchase__right {
+    width: 340px;          /* ← ここが効く（360でもOK） */
+    margin: 0 auto;
   }
 
-  .purchase__right {
+  .purchase__summary {
     width: 100%;
   }
 
+  /* 1行の高さを詰める */
+  .purchase__row {
+    padding: 10px 14px;    /* 22/26 → かなり締める */
+    gap: 10px;
+  }
+  
+    /* 商品名 */
+  .purchase__item-name {
+    font-size: 20px;        /* 30 → 20 */
+    margin-bottom: 8px;     /* 20 → 8 */
+    line-height: 1.25;
+  }
+
+  /* 商品代金（左側） */
+  .purchase__item-price {
+    font-size: 18px;        /* 27 → 18 */
+    line-height: 1.2;
+  }
+
+
+  /* ラベル・金額 */
+  .purchase__row-label,
+  .purchase__row-value {
+    font-size: 15px;       /* 20 → 15 */
+    line-height: 1.2;
+  }
+
+  /* ¥ マーク */
+  .purchase__row-yen {
+    margin-right: 6px;     /* 20 → 6 */
+    font-size: 15px;
+    line-height: 1.2;
+  }
+
+  /* 支払い方法（一番デカかったところ） */
+  .purchase__row-method {
+    font-size: 15px;       /* 24 → 15 */
+    line-height: 1.2;
+  }
+
+  /* 区切り線を少し控えめに */
+  .purchase__summary-line {
+    opacity: 0.2;
+  }
+
+  /* 購入ボタンも合わせて小さく */
   .purchase__btn {
     width: 100%;
+    height: 52px;          /* 60 → 52 */
+    font-size: 15px;       /* 26 → 20 */
+    margin-top: 22px;      /* 50 → 22 */
   }
 }
+
+
