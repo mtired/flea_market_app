@@ -15,8 +15,8 @@
       {{-- 商品情報 --}}
       <div class="purchase__item">
         <div class="purchase__thumb">
-          @if(!empty($item->image))
-            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="purchase__img">
+          @if(!empty($item->image_url))
+            <img src="{{ asset($item->image_url) }}" alt="{{ $item->name }}" class="purchase__img">
           @else
             <div class="purchase__img-placeholder">商品画像</div>
           @endif

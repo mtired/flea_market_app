@@ -72,3 +72,49 @@
   color: #ff3333;
   margin: 6px 0 0;
 }
+
+/* ===============================
+   タブレット（768–850px）
+================================*/
+@media (min-width: 768px) and (max-width: 850px) {
+  .address-edit {
+    padding: 40px 16px 60px;
+  }
+
+  .address-edit__inner {
+    max-width: 620px;
+  }
+
+  .address-edit__title {
+    font-size: 28px;
+    margin: 24px 0 40px;
+  }
+
+  .address-edit__form {
+    gap: 28px;
+  }
+
+  .address-edit__group {
+    gap: 8px;
+  }
+
+  .address-edit__label {
+    font-size: 20px;
+  }
+
+  .address-edit__input {
+    height: 42px;
+    font-size: 15px;
+    padding: 0 12px;
+  }
+
+  .address-edit__button {
+    height: 54px;
+    font-size: 18px;
+    margin-top: 12px;
+  }
+
+  .form-error {
+    font-size: 13px;
+  }
+}

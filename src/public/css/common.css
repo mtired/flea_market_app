@@ -83,3 +83,58 @@
     align-items: center;
     justify-content: center;
 }
+
+/* =========================
+  Tablet (768–850px)
+========================= */
+@media (min-width: 768px) and (max-width: 850px) {
+  .header {
+    height: 80px; /* 1行維持なので固定でOK */
+  }
+
+  .header__inner {
+    flex-wrap: nowrap;       /* ★ 折り返さない */
+    padding: 0 12px;
+    gap: 12px;               /* 全体の余白を少し圧縮 */
+  }
+
+  /* ロゴ */
+  .header__logo {
+    height: 18px;            /* わずかに縮小 */
+  }
+
+  /* 検索：中央で可変 */
+  .header__search {
+    flex: 1 1 auto;          /* ★ 縮められる領域に */
+    justify-content: center;
+    min-width: 0;            /* ★ flex崩れ防止（重要） */
+  }
+
+  .header__search-input {
+    width: 100%;
+    max-width: 360px;        /* ★ 500px → 圧縮 */
+    height: 44px;
+    font-size: 18px;
+  }
+
+  /* 右ナビ */
+  .header__nav {
+    gap: 12px;               /* 20px → 12px */
+    white-space: nowrap;     /* 折り返し防止 */
+  }
+
+  .header__nav-text {
+    font-size: 18px;         /* 24px → 18px */
+  }
+
+  .header__sell-button {
+    width: 88px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  .header__nav form {
+    margin: 0;
+  }
+}
+

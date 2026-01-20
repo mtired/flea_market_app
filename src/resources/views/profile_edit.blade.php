@@ -117,10 +117,10 @@
   </div>
 </main>
 
-{{-- 画像プレビュー（任意） --}}
+{{-- 画像プレビュー --}}
 <script>
   (function () {
-    const input = document.getElementById('profile_image');
+    const input = document.getElementById('image');  // ←ここ
     const preview = document.getElementById('jsProfilePreview');
     const placeholder = document.getElementById('jsProfilePlaceholder');
 
