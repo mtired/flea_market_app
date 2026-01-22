@@ -11,9 +11,6 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\TopController;
 use Illuminate\Support\Facades\Route;
 
-
-
-
 /*
 |--------------------------------------------------------------------------
 | 公開ページ（未ログインでも問題なし）
@@ -47,6 +44,7 @@ Route::middleware('auth')->group(function () {
         return view('verify_email');
     })->name('verification.notice');
 });
+
 
 /*
 |--------------------------------------------------------------------------
