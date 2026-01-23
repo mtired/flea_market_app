@@ -22,7 +22,7 @@ class UserProfileEditFeatureTest extends TestCase
             'postal_code' => '123-4567',
             'address' => '東京都テスト区1-2-3',
             'building' => 'テストビル',
-            'image' => 'https://example.com/profile.jpg',
+            'image' => 'profile_images/test.jpg',
             'profile_completed_at' => now(),
         ]);
 
@@ -30,18 +30,12 @@ class UserProfileEditFeatureTest extends TestCase
     }
 
     /**
-     * プロフィール編集画面のURL
+     * プロフィール編集画面URL
+     * ※必要に応じて修正
      */
     private function profileEditUrl(): string
     {
-        // 例：ミドルウェアで飛ばしている route('profile.edit') があるなら：
-        // return route('profile.edit');
-
-        // 例：/mypage/profile が編集画面なら：
-        return '/mypage/profile';
-
-        // 例：/mypage/profile/edit の場合：
-        // return '/mypage/profile/edit';
+        return route('profile.edit');
     }
 
     /**
@@ -56,7 +50,7 @@ class UserProfileEditFeatureTest extends TestCase
         $res = $this->actingAs($user)->get($this->profileEditUrl());
         $res->assertStatus(200);
 
-        // ユーザー名（input value に入っている想定）
+        // ユーザー名
         $res->assertSee('value="山田テスト"', false);
 
         // 郵便番号
@@ -65,12 +59,13 @@ class UserProfileEditFeatureTest extends TestCase
         // 住所
         $res->assertSee('value="東京都テスト区1-2-3"', false);
 
-        // プロフィール画像
-        // 表示の仕方が2パターンあるので、どちらかに当たる想定で両方見る（片方だけでもOK）
-        // 1) <img src="...">
-        $res->assertSee('https://example.com/profile.jpg', false);
+        // --- 画像（storage経由 or そのまま、どちらでも通るように） ---
+        $content = $res->getContent();
 
-        // もし storage 経由で加工されるなら、上が落ちる可能性があります。
-        // その場合は profile_edit.blade.php の img 部分に合わせて assert を変更してください。
+        $this->assertTrue(
+            str_contains($content, '/storage/profile_images/test.jpg')
+            || str_contains($content, 'profile_images/test.jpg'),
+            'プロフィール画像のパスが画面に表示されていません'
+        );
     }
 }
