@@ -6,6 +6,8 @@ use App\Models\Item;
 use App\Models\Profile;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Stripe\Stripe;
+use Stripe\Checkout\Session as CheckoutSession;
 
 class PurchaseController extends Controller
 {
@@ -30,40 +32,62 @@ class PurchaseController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'payment_method' => ['required', 'in:convenience,card,bank'],
-        ], [
-            'payment_method.required' => '支払い方法を選択してください',
-            'payment_method.in' => '支払い方法の形式が不正です',
+            'payment_method' => ['required', 'in:card,konbini'],
         ]);
 
-        // 配送先（profilesから）
-        $address = Profile::where('user_id', $user->id)->first();
+        $method = $validated['payment_method'];
 
-        // 住所がない場合は住所変更へ（要件に合わせて調整OK）
-        if (!$address) {
-            return redirect()->route('purchase.address.edit', ['item' => $item->id])
-                ->with('error', '配送先住所を登録してください');
-        }
-
-        /**
-         * 注文作成（あなたの orders テーブル構成に合わせてカラムは調整してください）
-         * 例として buyer_user_id / item_id / payment_method / postal_code / address / price を想定
-         */
-        Order::create([
+        // 注文作成
+        $order = Order::create([
             'buyer_user_id'  => $user->id,
             'item_id'        => $item->id,
-            'payment_method' => $validated['payment_method'],
-            'postal_code'    => $address->postal_code,
-            'address'        => $address->address,
-            'price'          => $item->price,
+            'postal_code'    => auth()->user()->profile->postal_code,
+            'address'        => auth()->user()->profile->address,
+            'building'        => auth()->user()->profile->building,
+        ]);
+
+        // Stripe APIキー
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        // Checkout セッション作成
+        $session = \Stripe\Checkout\Session::create([
+            'mode' => 'payment',
+            'payment_method_types' =>  [$method],
+            'line_items' => [[
+                'quantity' => 1,
+                'price_data' => [
+                    'currency' => 'jpy',
+                    'unit_amount' => (int) $item->price,
+                    'product_data' => ['name' => $item->name],
+                ],
+            ]],
+
+            'success_url' => url('/'),
+            'cancel_url'  => route('purchase.show', $item),
         ]);
 
         // 在庫・購入済みフラグなどがあるならここで更新
-        // $item->update(['is_sold' => true]);
         $item->update(['status' => 1]);
 
-        return redirect()
-            ->route('top') // トップのルート名に合わせて
-            ->with('success', '購入が完了しました');
+        // Stripeの決済画面へ
+        return redirect()->away($session->url);
+
+    }
+
+    public function cancel(Request $request)
+    {
+        $orderId = $request->query('order');
+
+        $order = Order::where('id', $orderId)
+            ->where('buyer_user_id', auth()->id())
+            ->firstOrFail();
+
+        // paid なら触らない（安全）
+        if ($order->item_id->status !== 1) {
+            $order->update(['status' => 'canceled']);
+        }
+
+        return redirect('/')
+            ->with('info', '購入をキャンセルしました。');
     }
 }

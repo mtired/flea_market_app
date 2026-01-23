@@ -86,6 +86,13 @@ Route::middleware(['auth', 'profile.completed', 'verified'])->group(function () 
     Route::post('/purchase/{item}', [PurchaseController::class, 'store'])
         ->name('purchase.store');
 
+    Route::get('/checkout/cancel', [PurchaseController::class, 'cancel'])
+        ->middleware('auth')
+        ->name('checkout.cancel');
+
+    Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle'])
+        ->name('stripe.webhook');
+
     // 住所変更
     Route::get('/purchase/address/{item}', [AddressEditController::class, 'edit'])
         ->name('purchase.address.edit');
