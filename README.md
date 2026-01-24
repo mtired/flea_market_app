@@ -16,6 +16,7 @@ cp .env.example .env # .env の環境変数を適宜変更
 php artisan key:generate
 php artisan migrate
 php artisan db:seed
+php artisan storage:link
 ```
 
 ## 開発環境
