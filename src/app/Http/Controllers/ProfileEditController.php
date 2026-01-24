@@ -16,6 +16,9 @@ class ProfileEditController extends Controller
         return view('profile_edit');
     }
 
+    /**
+     * プロフィール編集ページ表示
+     */
     public function edit()
     {
         $user = Auth::user();
@@ -24,13 +27,15 @@ class ProfileEditController extends Controller
 
         return view('profile_edit', compact('user', 'profile'));
     }
-    
+
+    /**
+     * プロフィール更新
+     */
     public function update(ProfileEditRequest $request)
     {
         $user = Auth::user();
         $validated = $request->validated();
 
-        // users テーブル（名前）
         $user->update([
             'name' => $validated['name'],
         ]);
@@ -40,7 +45,6 @@ class ProfileEditController extends Controller
         $imagePath = $existing?->image;
 
         if ($request->hasFile('image')) {
-            // 古い画像削除（任意）
             if ($existing?->image) {
                 Storage::disk('public')->delete($existing->image);
             }
@@ -48,7 +52,6 @@ class ProfileEditController extends Controller
             $imagePath = $request->file('image')->store('profile_images', 'public');
         }
 
-        // プロフィール完成条件
         $isCompleted =
             !empty($validated['postal_code']) &&
             !empty($validated['address']);

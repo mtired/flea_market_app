@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\Item;
 use App\Models\Order;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
@@ -18,7 +16,7 @@ class StripeWebhookController extends Controller
         $payload = $request->getContent();
         $sigHeader = $request->header('Stripe-Signature');
 
-        // .env に STRIPE_WEBHOOK_SECRET を入れる（Stripe CLI またはDashboardで取得）
+        // .env に STRIPE_WEBHOOK_SECRET を入れる
         $secret = config('services.stripe.webhook_secret');
 
         try {
@@ -29,7 +27,7 @@ class StripeWebhookController extends Controller
             return response('Invalid signature', 400);
         }
 
-        // ① カード: Checkout完了
+        // カード: Checkout完了
         if ($event->type === 'checkout.session.completed') {
             $session = $event->data->object;
 
@@ -40,7 +38,7 @@ class StripeWebhookController extends Controller
             }
         }
 
-        // ② コンビニ: 実支払い完了（PaymentIntent成功）
+        // コンビニ: 実支払い完了（PaymentIntent成功）
         if ($event->type === 'payment_intent.succeeded') {
             $pi = $event->data->object;
 
@@ -59,13 +57,11 @@ class StripeWebhookController extends Controller
         $order = Order::find($orderId);
         if (!$order) return;
 
-        // すでに paid 済みなら何もしない（冪等性）
         if ($order->status === 'paid') return;
 
-        // 注文を paid に
         $order->update(['status' => 'paid']);
 
-        // items を SOLD に（status=1）
+        // 購入済みに設定
         Item::where('id', $order->item_id)
             ->where('status', '!=', 1)
             ->update(['status' => 1]);

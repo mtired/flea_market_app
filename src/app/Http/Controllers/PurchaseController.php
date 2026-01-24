@@ -12,13 +12,12 @@ use Stripe\Checkout\Session as CheckoutSession;
 class PurchaseController extends Controller
 {
     /**
-     * 購入画面表示
+     * 商品購入ページ表示
      */
     public function show(Item $item)
     {
         $user = Auth::user();
 
-        // 配送先（例：profiles から取得する想定）
         $address = Profile::where('user_id', $user->id)->first();
 
         return view('purchase', compact('item', 'address'));
@@ -66,7 +65,7 @@ class PurchaseController extends Controller
             'cancel_url'  => route('purchase.show', $item),
         ]);
 
-        // 在庫・購入済みフラグなどがあるならここで更新
+        // 購入済みフラグ更新
         $item->update(['status' => 1]);
 
         // Stripeの決済画面へ
@@ -74,6 +73,9 @@ class PurchaseController extends Controller
 
     }
 
+    /**
+     * Stipe決済キャンセル時
+     */
     public function cancel(Request $request)
     {
         $orderId = $request->query('order');
@@ -82,7 +84,6 @@ class PurchaseController extends Controller
             ->where('buyer_user_id', auth()->id())
             ->firstOrFail();
 
-        // paid なら触らない（安全）
         if ($order->item_id->status !== 1) {
             $order->update(['status' => 'canceled']);
         }

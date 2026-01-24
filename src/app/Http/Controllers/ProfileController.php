@@ -13,6 +13,9 @@ class ProfileController extends Controller
         return view('profile');
     }
 
+    /**
+     * プロフィールページ表示
+     */
     public function show()
     {
         $user = Auth::user();
@@ -24,13 +27,13 @@ class ProfileController extends Controller
         // 出品した商品
         $sellItems = $user->items()->latest()->get();
 
-        // 購入した商品（Order → Item）
+        // 購入した商品
         $buyItems = $user->orders()
-            ->with('item')   // ← ここが重要
+            ->with('item')
             ->latest()
             ->get()
             ->pluck('item')
-            ->filter(); // itemがnullのレコードがあれば除外
+            ->filter();
 
         // タブ切り替え用（?tab=buy / ?tab=sell )
         $items = $page === 'buy' ? $buyItems : $sellItems;

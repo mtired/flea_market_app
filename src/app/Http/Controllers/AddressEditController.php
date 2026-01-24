@@ -15,7 +15,7 @@ class AddressEditController extends Controller
     }
 
     /**
-     * 住所変更画面
+     * 住所変更ページ表示
      */
     public function edit(Item $item)
     {

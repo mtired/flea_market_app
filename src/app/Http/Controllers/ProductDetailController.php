@@ -16,6 +16,9 @@ class ProductDetailController extends Controller
         return view('product_detail');
     }
 
+    /**
+     * 商品詳細ページ表示
+     */
     public function show(Item $item)
     {
         $isLiked = Auth::check()
@@ -24,6 +27,9 @@ class ProductDetailController extends Controller
         return view('product_detail', compact('item', 'isLiked'));
     }
 
+    /**
+     * コメント送信
+     */
     public function storeComment(CommentRequest $request, Item $item)
     {
         if (Auth::guest()) {
@@ -39,6 +45,9 @@ class ProductDetailController extends Controller
         return redirect("/items/{$item->id}");
     }
 
+    /**
+     * いいね切り替え
+     */
     public function toggleLike(Item $item)
     {
         $userId = Auth::id();
