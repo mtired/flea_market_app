@@ -4,15 +4,15 @@ return [
 
 /*** バリデーションエラーの共通メッセージ定義 ***/
 
-    'required' => ':attribute を入力してください',
-    'email' => ':attribute はメール形式で入力してください',
+    'required' => ':attributeを入力してください',
+    'email' => ':attributeはメール形式で入力してください',
     'min' => [
-        'string' => ':attribute は :min 文字以上で入力してください',
+        'string' => ':attributeは:min文字以上で入力してください',
     ],
     'max' => [
-        'string' => ':attribute は :max 文字以下で入力してください',
+        'string' => ':attributeは:max文字以下で入力してください',
     ],
-    'unique' => 'この :attribute は既に使われています',
+    'unique' => 'この:attributeは既に使われています',
 
 
 /*** 特定フィールド × ルールの個別指定（必要になったら追加） ***/
