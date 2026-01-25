@@ -42,11 +42,9 @@
       <div class="profile__grid">
         @forelse ($items as $item)
         <article class="profile__card">
-          <a href="{{ route('items.show', $item->id) }}">
-            <div class="profile__item-image">
-              <img src="{{ asset($item->image_url) }}" alt="{{ $item->name }}">
-            </div>
-          </a>
+          <div class="profile__item-image">
+            <img src="{{ asset($item->image_url) }}" alt="{{ $item->name }}">
+          </div>
 
           <p class="profile__item-name">{{ $item->name }}</p>
         </article>

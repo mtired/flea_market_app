@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class TopController extends Controller
 {
+    /**
+     * トップページ表示（検索を含む）
+     */
     public function index(Request $request)
     {
         $tab = $request->query('tab', 'recommend');
@@ -25,7 +28,7 @@ class TopController extends Controller
                 $products = $user
                 ? $user->likedItems()
                         ->when($keyword, function ($query) use ($keyword) {
-                        // 2. 商品名の部分一致
+                        // 商品名の部分一致
                         $query->where('items.name', 'like', "%{$keyword}%");
                     })
                     ->latest('items.created_at')

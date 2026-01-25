@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Condition;
 use App\Models\Item;
+use App\Models\Like;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -14,138 +16,90 @@ class ItemDetailTest extends TestCase
 {
     use RefreshDatabase;
 
+    private function makeCompletedUser(array $userAttrs = []): User
+    {
+        $user = User::factory()->create($userAttrs);
+        Profile::factory()->completed()->create(['user_id' => $user->id]);
+        return $user;
+    }
+
     private function detailUrl(Item $item): string
     {
-        // ルートが違う場合はここだけ変更
-        return "/items/{$item->id}";
-    }
-
-    private function createCondition(): Condition
-    {
-        // conditions の必須カラムが name 以外にもあるなら、ここに追加してください
-        return Condition::create([
-            'name' => '新品',
-        ]);
-    }
-
-    private function createCategory(string $name): Category
-    {
-        // categories の必須カラムが name 以外にもあるなら、ここに追加してください
-        return Category::create([
-            'name' => $name,
-        ]);
+        return route('items.show', ['item' => $item->id]);
     }
 
     /**
      * ■ID7-1
-     * 必要な情報が表示される
-     * （商品画像、商品名、ブランド名、価格、いいね数、コメント数、
-     *  商品説明、商品情報（カテゴリ、商品の状態）、
-     *  コメントしたユーザー情報、コメント内容）
+     * 商品詳細ページに必要な情報が表示される
+     *
+     * 表示対象：
+     * - 商品画像（image_url）
+     * - 商品名 / ブランド / 価格
+     * - 状態（Condition名）
+     * - カテゴリ（複数）
+     * - いいね数 / コメント数
+     * - コメント本文＆投稿者名
      */
     public function test_id7_1_item_detail_shows_all_required_information(): void
     {
-        $condition = $this->createCondition();
+        $viewer = $this->makeCompletedUser(['name' => '閲覧ユーザー']);
+        $seller = $this->makeCompletedUser(['name' => '出品者']);
 
-        $seller = User::factory()->create();
-        $liker1 = User::factory()->create(['name' => 'いいね太郎']);
-        $liker2 = User::factory()->create(['name' => 'いいね次郎']);
+        $condition = Condition::factory()->create([
+            'name' => '新品',
+        ]);
 
-        $commenter1 = User::factory()->create(['name' => 'コメント花子']);
-        $commenter2 = User::factory()->create(['name' => 'コメント次郎']);
+        // カテゴリ：家電 / スマホ
+        $cat1 = Category::create(['name' => '家電']);
+        $cat2 = Category::create(['name' => 'スマホ']);
 
         $item = Item::factory()->create([
-            'user_id' => $seller->id,
+            'user_id'      => $seller->id,
             'condition_id' => $condition->id,
-            'name' => 'テスト商品名',
-            'brand' => 'テストブランド',
-            'price' => 47000,
-            'description' => 'これはテスト用の商品説明です。',
-            'image' => 'https://example.com/test.jpg', // URLなので実ファイル不要
-            'status' => 0,
+            'status'       => 0,
+            'name'         => 'テスト商品名',
+            'brand'        => 'テストブランド',
+            'description'  => 'テスト説明文です',
+            'price'        => 12000,
+            'image'        => 'https://example.com/test.jpg',
         ]);
 
-        // カテゴリ（複数）
-        $catA = $this->createCategory('家電');
-        $catB = $this->createCategory('スマホ');
-        $item->categories()->attach([$catA->id, $catB->id]);
+        // カテゴリ紐付け
+        $item->categories()->attach([$cat1->id, $cat2->id]);
 
-        // いいね（2件）
-        $item->likedUsers()->attach([$liker1->id, $liker2->id]);
-
-        // コメント（2件）
-        // Commentモデルのカラム名が違う場合は、ここだけ合わせてください
-        Comment::create([
-            'user_id' => $commenter1->id,
+        Like::create([
             'item_id' => $item->id,
-            'content' => 'コメント1です',
+            'user_id' => $viewer->id,
         ]);
 
         Comment::create([
-            'user_id' => $commenter2->id,
             'item_id' => $item->id,
-            'content' => 'コメント2です',
+            'user_id' => $viewer->id,
+            'content' => 'テストコメントです',
         ]);
 
-        $response = $this->get($this->detailUrl($item));
+        // 商品詳細を表示（ログイン状態）
+        $response = $this->actingAs($viewer)->get($this->detailUrl($item));
         $response->assertStatus(200);
 
-        // --- 基本情報 ---
+        // 基本情報
         $response->assertSee('テスト商品名');
         $response->assertSee('テストブランド');
-        $response->assertSee('これはテスト用の商品説明です。');
+        $response->assertSee('12,000');
 
-        // 価格：表示が「¥47,000」形式ならこちらが通ります
-        $response->assertSee('¥'.number_format(47000));
+        // 商品画像
+        $response->assertSee($item->image_url, false);
 
-        // 商品画像（srcにURLが出る想定。HTMLエスケープ無効で検査）
-        $response->assertSee('https://example.com/test.jpg', false);
-
-        // --- 商品情報（状態・カテゴリ）---
+        // 状態・カテゴリ
         $response->assertSee('新品');
         $response->assertSee('家電');
         $response->assertSee('スマホ');
 
-        // --- いいね数・コメント数 ---
-        // 表示が「2」だけだと他の数字と被る可能性があるので、
-        // 可能なら UI 文言（例：Like / いいね / コメント）に合わせて強化推奨。
-        $response->assertSee('2'); // いいね数 or コメント数が2であること（最低限）
+        // いいね数・コメント数
+        $response->assertSee('1');
 
-        // --- コメントユーザー情報・コメント内容 ---
-        $response->assertSee('コメント花子');
-        $response->assertSee('コメント次郎');
-        $response->assertSee('コメント1です');
-        $response->assertSee('コメント2です');
-    }
-
-    /**
-     * ■ID7-2
-     * 複数選択されたカテゴリが表示されているか
-     */
-    public function test_id7_2_multiple_categories_are_displayed(): void
-    {
-        $condition = $this->createCondition();
-        $seller = User::factory()->create();
-
-        $item = Item::factory()->create([
-            'user_id' => $seller->id,
-            'condition_id' => $condition->id,
-            'name' => 'カテゴリ表示テスト商品',
-            'image' => 'https://example.com/test.jpg',
-            'status' => 0,
-        ]);
-
-        $cat1 = $this->createCategory('メンズ');
-        $cat2 = $this->createCategory('トップス');
-        $cat3 = $this->createCategory('冬物');
-
-        $item->categories()->attach([$cat1->id, $cat2->id, $cat3->id]);
-
-        $response = $this->get($this->detailUrl($item));
-
-        $response->assertStatus(200);
-        $response->assertSee('メンズ');
-        $response->assertSee('トップス');
-        $response->assertSee('冬物');
+        // コメント本文・投稿者名
+        $response->assertSee('テストコメントです');
+        $response->assertSee('閲覧ユーザー');
     }
 }

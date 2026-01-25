@@ -62,11 +62,9 @@ class ItemListTest extends TestCase
 
         $response->assertStatus(200);
 
-        // 両方の商品が表示される
         $response->assertSee($soldItem->name);
         $response->assertSee($normalItem->name);
 
-        // 「Sold」ラベルが表示される（表示場所まで厳密に縛るなら、SoldのHTML/クラスに合わせて検証も可能）
         $response->assertSee('Sold');
     }
 

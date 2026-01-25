@@ -26,13 +26,11 @@ class MyListTest extends TestCase
         $likedItem = Item::factory()->create([
             'user_id' => $seller->id,
             'name' => 'いいね商品',
-            'status' => 0,
         ]);
 
         $notLikedItem = Item::factory()->create([
             'user_id' => $seller->id,
             'name' => 'いいねしてない商品',
-            'status' => 0,
         ]);
 
         // likes（中間テーブル）に「いいね」を作成
@@ -81,7 +79,6 @@ class MyListTest extends TestCase
         $likedItem = Item::factory()->create([
             'user_id' => $seller->id,
             'name' => 'ゲストには見せない商品',
-            'status' => 0,
         ]);
 
         $likedItem->likedUsers()->attach($me->id);

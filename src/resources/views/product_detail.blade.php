@@ -25,9 +25,9 @@
 
       {{-- 右：商品情報 --}}
       <div class="product-detail__right">
-        <h1 class="product-detail__name">{{ $item->name ?? '商品名がここに入る' }}</h1>
+        <h1 class="product-detail__name">{{ $item->name ?? '' }}</h1>
 
-        <p class="product-detail__brand">{{ $item->brand ?? 'ブランド名' }}</p>
+        <p class="product-detail__brand">{{ $item->brand ?? '' }}</p>
 
         <p class="product-detail__price">
           <span class="product-detail__price-yen">¥{{ number_format($item->price ?? 0) }}</span>
@@ -65,7 +65,7 @@
         <section class="product-detail__section">
           <h2 class="product-detail__section-title">商品説明</h2>
           <p class="product-detail__description">
-            {{ $item->description ?? '未設定' }}
+            {{ $item->description ?? '' }}
           </p>
         </section>
 
@@ -87,7 +87,7 @@
 
             <div class="product-detail__info-row">
               <div class="product-detail__info-label">商品の状態</div>
-              <div class="product-detail__info-state">{{ $item->condition->name ?? '未設定' }}</div>
+              <div class="product-detail__info-state">{{ $item->condition->name ?? '' }}</div>
             </div>
           </div>
         </section>

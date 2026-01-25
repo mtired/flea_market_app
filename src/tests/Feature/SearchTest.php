@@ -12,9 +12,6 @@ class SearchTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * ★あなたの検索パラメータ名に合わせて変更してください
-     */
     private string $searchParam = 'keyword';
 
     /**
@@ -28,13 +25,11 @@ class SearchTest extends TestCase
         $hit = Item::factory()->create([
             'user_id' => $seller->id,
             'name' => 'Apple iPhone 15',
-            'status' => 0,
         ]);
 
         $miss = Item::factory()->create([
             'user_id' => $seller->id,
             'name' => 'Nintendo Switch',
-            'status' => 0,
         ]);
 
         $response = $this->get('/?'.$this->searchParam.'=iPho');
@@ -55,19 +50,19 @@ class SearchTest extends TestCase
     {
         $me = User::factory()->create();
         $seller = User::factory()->create();
+        $condition = Condition::factory()->create();
 
         // いいね対象：検索でヒットする
         $likedHit = Item::factory()->create([
             'user_id' => $seller->id,
             'name' => 'Apple Watch',
-            'status' => 0,
         ]);
 
         // いいね対象：検索でヒットしない
         $likedMiss = Item::factory()->create([
             'user_id' => $seller->id,
             'name' => 'Camera',
-            'status' => 0,
+
         ]);
 
         // 自分が「いいね」した商品にする

@@ -8,6 +8,9 @@ use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class RegisterController extends Controller
 {
+    /**
+     * ユーザ登録ページ表示
+     */
     public function index()
     {
         return view('register');

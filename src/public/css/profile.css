@@ -123,13 +123,6 @@
   gap: 48px;
 }
 
-/* カードリンク（カード全体クリック） */
-.profile__card-link {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-}
-
 /* 画像枠：width100% + max-width290 + 正方形 */
 .profile__item-image {
   width: 100%;

@@ -14,30 +14,15 @@ class PurchaseWithoutStripeTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * 商品状態（condition）作成
-     */
-    private function createCondition(): Condition
-    {
-        return Condition::create([
-            'name' => '新品',
-        ]);
-    }
-
-    /**
-     * プロフィール完了済みユーザー作成
-     */
     private function makeCompletedUser(): User
     {
         $user = User::factory()->create();
 
-        Profile::create([
+        Profile::factory()->completed()->create([
             'user_id' => $user->id,
             'postal_code' => '123-4567',
             'address' => '東京都テスト区1-2-3',
             'building' => 'テストビル',
-            'image' => 'https://example.com/profile.jpg',
-            'profile_completed_at' => now(),
         ]);
 
         return $user;
@@ -48,8 +33,7 @@ class PurchaseWithoutStripeTest extends TestCase
      */
     private function purchasePageUrl(Item $item): string
     {
-        // routes/web.php に合わせて必要なら変更
-        return "/purchase/{$item->id}";
+        return route('purchase.show', $item->id);
     }
 
     /**
@@ -57,8 +41,7 @@ class PurchaseWithoutStripeTest extends TestCase
      */
     private function purchaseSubmitUrl(Item $item): string
     {
-        // PurchaseController@store のURLに合わせる
-        return "/purchase/{$item->id}";
+        return route('purchase.store', $item->id);
     }
 
     /**
@@ -66,7 +49,7 @@ class PurchaseWithoutStripeTest extends TestCase
      */
     private function topUrl(): string
     {
-        return route('top'); // なければ '/'
+        return route('top');
     }
 
     /**
@@ -85,31 +68,31 @@ class PurchaseWithoutStripeTest extends TestCase
     {
         $buyer = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
-        $condition = $this->createCondition();
 
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
-            'status' => 0,
-            'price' => 1000,
-            'name' => '購入テスト商品',
         ]);
 
+        // 購入画面表示確認
         $this->actingAs($buyer)
             ->get($this->purchasePageUrl($item))
             ->assertStatus(200);
 
+        // 購入
         $res = $this->actingAs($buyer)->post($this->purchaseSubmitUrl($item), [
-            'payment_method' => 'convenience',
+            'payment_method' => 'konbini',
         ]);
 
+        // トップ画面リダイレクト確認
         $res->assertRedirect($this->topUrl());
 
+        // 購入確認
         $this->assertDatabaseHas('items', [
             'id' => $item->id,
             'status' => 1,
         ]);
 
+        // DB保存確認
         $this->assertDatabaseHas('orders', [
             'buyer_user_id' => $buyer->id,
             'item_id' => $item->id,
@@ -127,28 +110,28 @@ class PurchaseWithoutStripeTest extends TestCase
     {
         $buyer = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
-        $condition = $this->createCondition();
 
+        // Topで表示確認したいので商品名を固定
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
-            'status' => 0,
-            'price' => 2000,
             'name' => 'SOLD表示テスト商品',
         ]);
 
         // 購入
         $this->actingAs($buyer)->post($this->purchaseSubmitUrl($item), [
-            'payment_method' => 'convenience',
+            'payment_method' => 'konbini',
         ])->assertRedirect($this->topUrl());
 
+        // DB上でのSOLD確認
         $this->assertSame(1, $item->fresh()->status);
 
+        // Top画面表示
         $top = $this->actingAs($buyer)->get($this->topUrl());
         $top->assertStatus(200);
 
         $top->assertSee('SOLD表示テスト商品');
 
+        // Sold表示確認
         $top->assertSee('Sold');
     }
 
@@ -160,26 +143,24 @@ class PurchaseWithoutStripeTest extends TestCase
     {
         $buyer = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
-        $condition = $this->createCondition();
 
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
-            'status' => 0,
-            'price' => 3000,
             'name' => '購入一覧表示テスト商品',
         ]);
 
         // 購入
         $this->actingAs($buyer)->post($this->purchaseSubmitUrl($item), [
-            'payment_method' => 'convenience',
+            'payment_method' => 'konbini',
         ])->assertRedirect($this->topUrl());
 
+          // orders 作成確認
         $this->assertDatabaseHas('orders', [
             'buyer_user_id' => $buyer->id,
             'item_id' => $item->id,
         ]);
 
+        // 商品一覧確認
         $res = $this->actingAs($buyer)->get($this->buyListUrl());
         $res->assertStatus(200);
         $res->assertSee('購入一覧表示テスト商品');

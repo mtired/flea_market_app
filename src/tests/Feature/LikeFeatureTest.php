@@ -14,14 +14,9 @@ class LikeFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function createCondition(): Condition
-    {
-        return Condition::create(['name' => '新品']);
-    }
-
     private function detailUrl(Item $item): string
     {
-        return "/items/{$item->id}";
+        return route('items.show', $item->id);
     }
 
     private function toggleLikeUrl(Item $item): string
@@ -33,14 +28,7 @@ class LikeFeatureTest extends TestCase
     {
         $user = User::factory()->create();
 
-        Profile::create([
-            'user_id' => $user->id,
-            'postal_code' => '123-4567',
-            'address' => '東京都テスト区1-2-3',
-            'building' => 'テストビル',
-            'image' => 'https://example.com/profile.jpg',
-            'profile_completed_at' => now(),
-        ]);
+        Profile::factory()->completed()->create(['user_id' => $user->id]);
 
         return $user;
     }
@@ -51,16 +39,11 @@ class LikeFeatureTest extends TestCase
      */
     public function test_id8_1_like_can_be_registered_and_count_increases(): void
     {
-        $condition = $this->createCondition();
-
         $me = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
 
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
-            'name' => 'いいねテスト商品',
-            'status' => 0,
         ]);
 
         $this->assertDatabaseMissing('likes', [
@@ -70,7 +53,7 @@ class LikeFeatureTest extends TestCase
 
         // いいね押下
         $res = $this->actingAs($me)->post($this->toggleLikeUrl($item));
-        $res->assertRedirect(); 
+        $res->assertRedirect();
 
         $this->assertDatabaseHas('likes', [
             'user_id' => $me->id,
@@ -91,16 +74,11 @@ class LikeFeatureTest extends TestCase
      */
     public function test_id8_2_liked_icon_is_pink_when_already_liked(): void
     {
-        $condition = $this->createCondition();
-
         $me = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
 
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
-            'name' => 'アイコン状態テスト商品',
-            'status' => 0,
         ]);
 
         Like::create([
@@ -121,20 +99,15 @@ class LikeFeatureTest extends TestCase
      * 再度いいねアイコンを押下することによって、いいねを解除することができる。
      */
     public function test_id8_3_like_can_be_removed_and_count_decreases(): void
-{
-        $condition = $this->createCondition();
-
+    {
         $me = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
 
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
-            'name' => '解除テスト商品',
-            'status' => 0,
         ]);
 
-        // ① まず「押下していいねする」（＝確実に controller を通す）
+        // いいね押下
         $likeRes = $this->actingAs($me)
             ->from($this->detailUrl($item))
             ->post($this->toggleLikeUrl($item));
@@ -145,19 +118,18 @@ class LikeFeatureTest extends TestCase
             'item_id' => $item->id,
         ]);
 
-        // ② もう一回押して解除する
+        // いいね解除
         $unlikeRes = $this->actingAs($me)
             ->from($this->detailUrl($item))
             ->post($this->toggleLikeUrl($item));
         $unlikeRes->assertRedirect($this->detailUrl($item));
 
-        // ③ DBから消えた
         $this->assertDatabaseMissing('likes', [
             'user_id' => $me->id,
             'item_id' => $item->id,
         ]);
 
-        // ④ 表示も 0 & デフォルト画像
+        // 表示確認
         $detail = $this->actingAs($me)->get($this->detailUrl($item));
         $detail->assertStatus(200);
         $detail->assertSee('>0<', false);

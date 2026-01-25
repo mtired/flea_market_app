@@ -12,13 +12,12 @@ use Stripe\Checkout\Session as CheckoutSession;
 class PurchaseController extends Controller
 {
     /**
-     * 購入画面表示
+     * 商品購入ページ表示
      */
     public function show(Item $item)
     {
         $user = Auth::user();
 
-        // 配送先（例：profiles から取得する想定）
         $address = Profile::where('user_id', $user->id)->first();
 
         return view('purchase', compact('item', 'address'));
@@ -37,14 +36,26 @@ class PurchaseController extends Controller
 
         $method = $validated['payment_method'];
 
-        // 注文作成
+        $profile = Profile::where('user_id', $user->id)->firstOrFail();
+
         $order = Order::create([
-            'buyer_user_id'  => $user->id,
-            'item_id'        => $item->id,
-            'postal_code'    => auth()->user()->profile->postal_code,
-            'address'        => auth()->user()->profile->address,
-            'building'        => auth()->user()->profile->building,
+            'buyer_user_id' => $user->id,
+            'item_id'       => $item->id,
+            'postal_code'   => $profile->postal_code,
+            'address'       => $profile->address,
+            'building'      => $profile->building,
         ]);
+
+        // コンビニ払い (Top画面へ)
+        if ($method === 'konbini') {
+            $item->update(['status' => 1]);
+
+            return redirect()->route('top')
+                ->with('success', '購入を受け付けました（コンビニ払い）。');
+        }
+
+        // カード払い (Stripe決済へ)
+        Stripe::setApiKey(config('services.stripe.secret'));
 
         // Stripe APIキー
         Stripe::setApiKey(config('services.stripe.secret'));
@@ -66,28 +77,10 @@ class PurchaseController extends Controller
             'cancel_url'  => route('purchase.show', $item),
         ]);
 
-        // 在庫・購入済みフラグなどがあるならここで更新
+        // 購入済みフラグ更新
         $item->update(['status' => 1]);
 
         // Stripeの決済画面へ
         return redirect()->away($session->url);
-
-    }
-
-    public function cancel(Request $request)
-    {
-        $orderId = $request->query('order');
-
-        $order = Order::where('id', $orderId)
-            ->where('buyer_user_id', auth()->id())
-            ->firstOrFail();
-
-        // paid なら触らない（安全）
-        if ($order->item_id->status !== 1) {
-            $order->update(['status' => 'canceled']);
-        }
-
-        return redirect('/')
-            ->with('info', '購入をキャンセルしました。');
     }
 }

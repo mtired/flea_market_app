@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class ProductCreateController extends Controller
 {
     /**
-     * 出品画面表示
+     * 商品出品ページ表示
      */
     public function create()
     {
@@ -36,9 +36,10 @@ class ProductCreateController extends Controller
             'user_id'       => Auth::id(),
             'condition_id'  => $validated['condition_id'],
             'name'          => $validated['name'],
-            'brand'         => $validated['brand'] ?? null,
+            'brand'         => $validated['brand'],
             'description'   => $validated['description'],
             'price'         => $validated['price'],
+            'brand'         => $validated['brand'],
             'image'         => $imagePath,
             'status'        => 0
         ]);
@@ -46,7 +47,7 @@ class ProductCreateController extends Controller
         // カテゴリ（複数）を紐付け
         // Request側は category_ids[] の配列になっている想定
         $item->categories()->sync($validated['category_ids']);
-        
+
         // 商品詳細へ（ルート名はあなたの環境に合わせて）
         return redirect()->route('items.show', $item->id);
     }

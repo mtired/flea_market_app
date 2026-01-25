@@ -17,13 +17,12 @@ class UserProfileEditFeatureTest extends TestCase
             'name' => '山田テスト',
         ]);
 
-        Profile::create([
+        Profile::factory()->completed()->create([
             'user_id' => $user->id,
             'postal_code' => '123-4567',
             'address' => '東京都テスト区1-2-3',
             'building' => 'テストビル',
             'image' => 'profile_images/test.jpg',
-            'profile_completed_at' => now(),
         ]);
 
         return $user;
@@ -31,7 +30,6 @@ class UserProfileEditFeatureTest extends TestCase
 
     /**
      * プロフィール編集画面URL
-     * ※必要に応じて修正
      */
     private function profileEditUrl(): string
     {
@@ -59,13 +57,11 @@ class UserProfileEditFeatureTest extends TestCase
         // 住所
         $res->assertSee('value="東京都テスト区1-2-3"', false);
 
-        // --- 画像（storage経由 or そのまま、どちらでも通るように） ---
-        $content = $res->getContent();
+        // 建物名
+        $res->assertSee('value="テストビル"', false);
 
-        $this->assertTrue(
-            str_contains($content, '/storage/profile_images/test.jpg')
-            || str_contains($content, 'profile_images/test.jpg'),
-            'プロフィール画像のパスが画面に表示されていません'
-        );
+        // 画像
+        $profile = Profile::where('user_id', $user->id)->firstOrFail();
+        $res->assertSee('/storage/' . $profile->image, false);
     }
 }
