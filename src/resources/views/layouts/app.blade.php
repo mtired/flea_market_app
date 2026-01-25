@@ -26,11 +26,15 @@
 
     @unless (request()->is('login') || request()->is('register'))
     {{-- 検索 --}}
-    <form class="header__search" action="/" method="get">
+    <form class="header__search" action="{{ url('/') }}" method="get">
+      {{-- 今開いてるタブを保持（recommend / mylist） --}}
+      <input type="hidden" name="tab" value="{{ request('tab', 'recommend') }}">
+
       <input
         class="header__search-input"
         type="text"
         name="keyword"
+        value="{{ request('keyword') }}"
         placeholder="なにをお探しですか？"
       >
     </form>

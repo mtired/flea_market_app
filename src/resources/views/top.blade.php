@@ -10,14 +10,15 @@
   {{-- タブ --}}
   <div class="items__tabs">
     <a
-      href="/"
-      class="items__tab {{ $activeTab === 'recommend' ? 'is-active' : '' }}"
+      href="{{ url('/') }}?{{ http_build_query(array_filter(['tab' => 'recommend', 'keyword' => request('keyword')])) }}"
+      class="items__tab {{ $activeTab === 'recommend' ? 'items__tab--active' : '' }}"
     >
       おすすめ
     </a>
+
     <a
-      href="/?tab=mylist"
-      class="items__tab {{ $activeTab === 'mylist' ? 'is-active' : '' }}"
+      href="{{ url('/') }}?{{ http_build_query(array_filter(['tab' => 'mylist', 'keyword' => request('keyword')])) }}"
+      class="items__tab {{ $activeTab === 'mylist' ? 'items__tab--active' : '' }}"
     >
       マイリスト
     </a>
