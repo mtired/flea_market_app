@@ -52,7 +52,7 @@
             >
             変更する
             </a>
-        </div> 
+        </div>
 
         <div class="purchase__address-body">
           <p class="purchase__address-text">〒 {{ $address->postal_code ?? 'XXX-YYYY' }}</p>
@@ -89,4 +89,27 @@
 
   </div>
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const select = document.querySelector('select[name="payment_method"]');
+  const preview = document.getElementById('payment-preview');
+
+  if (!select || !preview) return;
+
+  const labels = {
+    konbini: 'コンビニ払い',
+    card: 'カード払い',
+  };
+
+  // 初期表示（デフォルト選択に合わせる）
+  preview.textContent = labels[select.value] ?? '';
+
+  // 選択変更時
+  select.addEventListener('change', () => {
+    preview.textContent = labels[select.value] ?? '';
+  });
+});
+</script>
+
 @endsection

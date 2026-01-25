@@ -8,6 +8,8 @@ use App\Models\Item;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ItemCreateFeatureTest extends TestCase
@@ -20,21 +22,9 @@ class ItemCreateFeatureTest extends TestCase
             'name' => '出品者テスト',
         ]);
 
-        Profile::create([
-            'user_id' => $user->id,
-            'postal_code' => '123-4567',
-            'address' => '東京都テスト区1-2-3',
-            'building' => 'テストビル',
-            'image' => 'profile_images/test.jpg',
-            'profile_completed_at' => now(),
-        ]);
+        Profile::factory()->completed()->create(['user_id' => $user->id]);
 
         return $user;
-    }
-
-    private function createCondition(): Condition
-    {
-        return Condition::create(['name' => '新品']);
     }
 
     private function createCategories(): array
@@ -50,7 +40,7 @@ class ItemCreateFeatureTest extends TestCase
      */
     private function sellPageUrl(): string
     {
-        return '/sell';
+        return route('items.create');
     }
 
     /**
@@ -58,7 +48,7 @@ class ItemCreateFeatureTest extends TestCase
      */
     private function sellStoreUrl(): string
     {
-        return '/sell';
+        return route('items.store');
     }
 
     /**
@@ -67,32 +57,30 @@ class ItemCreateFeatureTest extends TestCase
      */
     public function test_id15_1_item_can_be_created_with_required_fields(): void
     {
+        Storage::fake('public');
+
         $user = $this->makeCompletedUser();
-        $condition = $this->createCondition();
+        $condition = Condition::factory()->create();
         [$cat1, $cat2] = $this->createCategories();
 
-        // 出品画面が開ける
         $this->actingAs($user)->get($this->sellPageUrl())->assertStatus(200);
 
-        // 出品POST
         $payload = [
             'name' => 'テスト出品商品',
             'brand' => 'テストブランド',
             'description' => 'テスト説明です',
             'condition_id' => $condition->id,
             'price' => 12345,
-
-            // ★ 相対パスで画像を保存
-            'image' => 'item_images/test.jpg',
-
-            // カテゴリ（フォーム名に合わせて調整）
-            'category_id' => [$cat1->id, $cat2->id],
+            'image' => UploadedFile::fake()->create('test.jpeg', 100, 'image/jpeg'),
+            'category_ids' => [$cat1->id, $cat2->id],
         ];
 
         $res = $this->actingAs($user)->post($this->sellStoreUrl(), $payload);
+
+        $res->assertSessionHasNoErrors();
+
         $res->assertStatus(302);
 
-        // items に保存されている
         $this->assertDatabaseHas('items', [
             'user_id' => $user->id,
             'name' => 'テスト出品商品',
@@ -100,15 +88,17 @@ class ItemCreateFeatureTest extends TestCase
             'description' => 'テスト説明です',
             'condition_id' => $condition->id,
             'price' => 12345,
-            'image' => 'item_images/test.jpg',
+            'status' => 0,
         ]);
 
-        // item を取得
         $item = Item::where('user_id', $user->id)
             ->where('name', 'テスト出品商品')
             ->firstOrFail();
 
-        // 中間テーブル（item_categories）
+        // 画像確認
+        $this->assertStringStartsWith('item_images/', $item->image);
+        Storage::disk('public')->assertExists($item->image);
+
         $this->assertDatabaseHas('item_categories', [
             'item_id' => $item->id,
             'category_id' => $cat1->id,
@@ -118,7 +108,6 @@ class ItemCreateFeatureTest extends TestCase
             'category_id' => $cat2->id,
         ]);
 
-        // ★ accessor の確認（任意だけど強い）
-        $this->assertSame('/storage/item_images/test.jpg', $item->image_url);
+        $this->assertSame('/storage/' . $item->image, $item->image_url);
     }
 }

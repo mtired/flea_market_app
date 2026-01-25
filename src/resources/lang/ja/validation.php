@@ -17,7 +17,7 @@ return [
 
 /*** 特定フィールド × ルールの個別指定（必要になったら追加） ***/
     'custom' => [
-        'password.confirmed' => '確認用パスワードと一致しません'
+        'password.confirmed' => ':attributeと一致しません'
     ],
 
 /*** フィールド名を日本語に変換 ***/
@@ -25,6 +25,6 @@ return [
         'name' => 'お名前',
         'email' => 'メールアドレス',
         'password' => 'パスワード',
-        'password_confirmation' => '確認用パスワード',
+        'password_confirmation' => 'パスワード',
     ],
 ];

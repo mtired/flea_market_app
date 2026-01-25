@@ -36,9 +36,10 @@ class ProductCreateController extends Controller
             'user_id'       => Auth::id(),
             'condition_id'  => $validated['condition_id'],
             'name'          => $validated['name'],
-            'brand'         => $validated['brand'] ?? null,
+            'brand'         => $validated['brand'],
             'description'   => $validated['description'],
             'price'         => $validated['price'],
+            'brand'         => $validated['brand'],
             'image'         => $imagePath,
             'status'        => 0
         ]);

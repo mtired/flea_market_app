@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Condition;
 use App\Models\Item;
-use App\Models\Order;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,33 +13,21 @@ class AddressEditFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function createCondition(): Condition
-    {
-        return Condition::create(['name' => '新品']);
-    }
-
     /**
-     * プロフィール完了済みユーザー
+     * プロフィール完了済みユーザー（ProfileをFactoryで作成）
      */
     private function makeCompletedUser(): User
     {
         $user = User::factory()->create();
 
-        Profile::create([
-            'user_id' => $user->id,
-            'postal_code' => '000-0000',
-            'address' => '初期住所',
-            'building' => null,
-            'image' => 'https://example.com/profile.jpg',
-            'profile_completed_at' => now(),
-        ]);
+        Profile::factory()->completed()->create(['user_id' => $user->id]);
 
         return $user;
     }
 
     private function addressEditUrl(Item $item): string
     {
-        return Route('purchase.address.edit', ['item' => $item->id]);
+        return route('purchase.address.edit', ['item' => $item->id]);
     }
 
     private function addressUpdateUrl(Item $item): string
@@ -66,18 +53,11 @@ class AddressEditFeatureTest extends TestCase
     {
         $buyer = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
-        $condition = $this->createCondition();
 
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
-            'status' => 0,
-            'name' => '住所反映テスト商品',
-            'price' => 1000,
         ]);
 
-        // 1. ログイン
-        // 2. 住所変更画面で住所を登録
         $new = [
             'postal_code' => '123-4567',
             'address' => '東京都テスト区1-2-3',
@@ -97,7 +77,6 @@ class AddressEditFeatureTest extends TestCase
             'building' => 'テストビル',
         ]);
 
-        // 3. 購入画面を再度開く → 住所が反映されている
         $purchase = $this->actingAs($buyer)->get($this->purchasePageUrl($item));
         $purchase->assertStatus(200);
 
@@ -114,18 +93,11 @@ class AddressEditFeatureTest extends TestCase
     {
         $buyer = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
-        $condition = $this->createCondition();
 
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
-            'status' => 0,
-            'name' => '住所紐づけテスト商品',
-            'price' => 2000,
         ]);
 
-        // 1. ログイン
-        // 2. 住所変更
         $new = [
             'postal_code' => '987-6543',
             'address' => '大阪府テスト市4-5-6',
@@ -137,7 +109,6 @@ class AddressEditFeatureTest extends TestCase
             ->put($this->addressUpdateUrl($item), $new)
             ->assertStatus(302);
 
-        // 3. 商品を購入
         $buy = $this->actingAs($buyer)->post($this->purchaseSubmitUrl($item), [
             'payment_method' => 'konbini',
         ]);

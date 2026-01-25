@@ -143,8 +143,6 @@ class RegisterValidationTest extends TestCase
     /**
      * ■ID1-7
      * メール認証誘導画面で「認証はこちらから」ボタンを押下するとメール認証サイトに遷移する
-     *
-     * ※ テストでは「ボタン押下」を再現するため、そのボタンのリンク先URLにアクセスして検証
      */
     public function test_id1_7_click_verify_button_redirects_to_verification_site(): void
     {

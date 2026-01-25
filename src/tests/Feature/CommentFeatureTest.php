@@ -14,37 +14,23 @@ class CommentFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function createCondition(): Condition
-    {
-        return Condition::create(['name' => '新品']);
-    }
-
     private function makeCompletedUser(): User
     {
         $user = User::factory()->create();
 
-        Profile::create([
-            'user_id' => $user->id,
-            'postal_code' => '123-4567',
-            'address' => '東京都テスト区',
-            'building' => 'テストビル',
-            'image' => 'https://example.com/profile.jpg',
-            'profile_completed_at' => now(),
-        ]);
+        Profile::factory()->completed()->create(['user_id' => $user->id]);
 
         return $user;
     }
 
     private function detailUrl(Item $item): string
     {
-        return "/items/{$item->id}";
+        return route('items.show', ['item' => $item->id]);
     }
 
     private function commentPostUrl(Item $item): string
     {
-        // routes/web.php の定義に合わせてください
-        // Route::post('/items/{item}/comments', ...)
-        return "/items/{$item->id}/comments";
+        return route('items.comments.store', ['item' => $item->id]);
     }
 
     /**
@@ -55,11 +41,9 @@ class CommentFeatureTest extends TestCase
     {
         $user = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
-        $condition = $this->createCondition();
 
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
         ]);
 
         $this->assertSame(0, Comment::count());
@@ -67,7 +51,7 @@ class CommentFeatureTest extends TestCase
         $response = $this->actingAs($user)
             ->from($this->detailUrl($item))
             ->post($this->commentPostUrl($item), [
-                'content' => 'テストコメントです',
+                'content' => 'テストコメント',
             ]);
 
         $response->assertRedirect($this->detailUrl($item));
@@ -75,7 +59,7 @@ class CommentFeatureTest extends TestCase
         $this->assertDatabaseHas('comments', [
             'user_id' => $user->id,
             'item_id' => $item->id,
-            'content' => 'テストコメントです',
+            'content' => 'テストコメント',
         ]);
 
         $this->assertSame(1, Comment::count());
@@ -88,13 +72,12 @@ class CommentFeatureTest extends TestCase
     public function test_id9_2_guest_cannot_post_comment(): void
     {
         $seller = $this->makeCompletedUser();
-        $condition = $this->createCondition();
 
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
         ]);
 
+        // 未ログインで投稿
         $response = $this->post($this->commentPostUrl($item), [
             'content' => 'ゲストコメント',
         ]);
@@ -118,11 +101,9 @@ class CommentFeatureTest extends TestCase
     {
         $user = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
-        $condition = $this->createCondition();
 
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
         ]);
 
         $response = $this->actingAs($user)
@@ -145,11 +126,9 @@ class CommentFeatureTest extends TestCase
     {
         $user = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
-        $condition = $this->createCondition();
 
         $item = Item::factory()->create([
             'user_id' => $seller->id,
-            'condition_id' => $condition->id,
         ]);
 
         $longComment = str_repeat('あ', 256);

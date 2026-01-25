@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 | 公開ページ（未ログインでも問題なし）
 |--------------------------------------------------------------------------
 */
+
+// 商品一覧画面 (トップ画面)
 Route::get('/', [TopController::class, 'index'])->name('top');
+
+// 商品詳細画面
 Route::get('/items/{item}', [ProductDetailController::class, 'show'])
     ->name('items.show');
 
@@ -27,14 +31,17 @@ Route::get('/items/{item}', [ProductDetailController::class, 'show'])
 */
 Route::middleware('guest')->group(function () {
 
+    // ユーザ登録画面
     Route::get('/register', [RegisterController::class, 'index']);
+
+    // ログイン画面
     Route::get('/login', [LoginController::class, 'index'])->name('login');
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| ログイン済み（認証誘導画面は未認証でも見ることができるようにするため）
+| ログイン済み（認証誘導画面はメール未認証で見ることができるようにする）
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
@@ -48,12 +55,12 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| ログイン済み + メール認証済み（プロフ設定画面へ繊維）
+| ログイン済み + メール認証済み + プロフィール未完了（プロフ設定画面へ遷移）
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // プロフィール編集（d）
+    // プロフィール編集
     Route::get('/mypage/profile', [ProfileEditController::class, 'edit'])
         ->name('profile.edit');
 
@@ -63,7 +70,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| ログイン済み + プロフィール完了必須
+| ログイン済み + メール認証済み + プロフィール完了
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'profile.completed', 'verified'])->group(function () {
