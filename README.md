@@ -77,6 +77,5 @@ Composer：2.9.2
 テストコマンド一覧
 
 ```bash
-
-
+php artisan test tests/Feature
 ```
