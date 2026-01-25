@@ -36,14 +36,26 @@ class PurchaseController extends Controller
 
         $method = $validated['payment_method'];
 
-        // 注文作成
+        $profile = Profile::where('user_id', $user->id)->firstOrFail();
+
         $order = Order::create([
-            'buyer_user_id'  => $user->id,
-            'item_id'        => $item->id,
-            'postal_code'    => auth()->user()->profile->postal_code,
-            'address'        => auth()->user()->profile->address,
-            'building'        => auth()->user()->profile->building,
+            'buyer_user_id' => $user->id,
+            'item_id'       => $item->id,
+            'postal_code'   => $profile->postal_code,
+            'address'       => $profile->address,
+            'building'      => $profile->building,
         ]);
+
+        // コンビニ払い (Top画面へ)
+        if ($method === 'konbini') {
+            $item->update(['status' => 1]);
+
+            return redirect()->route('top')
+                ->with('success', '購入を受け付けました（コンビニ払い）。');
+        }
+
+        // カード払い (Stripe決済へ)
+        Stripe::setApiKey(config('services.stripe.secret'));
 
         // Stripe APIキー
         Stripe::setApiKey(config('services.stripe.secret'));
@@ -70,25 +82,5 @@ class PurchaseController extends Controller
 
         // Stripeの決済画面へ
         return redirect()->away($session->url);
-
-    }
-
-    /**
-     * Stipe決済キャンセル時
-     */
-    public function cancel(Request $request)
-    {
-        $orderId = $request->query('order');
-
-        $order = Order::where('id', $orderId)
-            ->where('buyer_user_id', auth()->id())
-            ->firstOrFail();
-
-        if ($order->item_id->status !== 1) {
-            $order->update(['status' => 'canceled']);
-        }
-
-        return redirect('/')
-            ->with('info', '購入をキャンセルしました。');
     }
 }

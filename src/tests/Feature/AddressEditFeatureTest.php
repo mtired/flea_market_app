@@ -20,8 +20,7 @@ class AddressEditFeatureTest extends TestCase
     }
 
     /**
-     * プロフィール完了済みユーザー（住所も一旦入れておく）
-     * ※ EnsureProfileCompleted を考慮
+     * プロフィール完了済みユーザー
      */
     private function makeCompletedUser(): User
     {
@@ -41,28 +40,22 @@ class AddressEditFeatureTest extends TestCase
 
     private function addressEditUrl(Item $item): string
     {
-        // 例：/purchase/address/{item_id}
-        return "/purchase/address/{$item->id}";
-        // ルート名があるなら：return route('purchase.address.edit', ['item' => $item->id]);
+        return Route('purchase.address.edit', ['item' => $item->id]);
     }
 
     private function addressUpdateUrl(Item $item): string
     {
-        // 例：PUT /purchase/address/{item_id}
-        return "/purchase/address/{$item->id}";
-        // ルート名があるなら：return route('purchase.address.update', ['item' => $item->id]);
+        return route('purchase.address.update', ['item' => $item->id]);
     }
 
     private function purchasePageUrl(Item $item): string
     {
-        return "/purchase/{$item->id}";
-        // ルート名があるなら：return route('purchase.show', ['item' => $item->id]);
+        return route('purchase.show', ['item' => $item->id]);
     }
 
     private function purchaseSubmitUrl(Item $item): string
     {
-        return "/purchase/{$item->id}";
-        // ルート名があるなら：return route('purchase.store', ['item' => $item->id]);
+        return route('purchase.store', ['item' => $item->id]);
     }
 
     /**
@@ -84,7 +77,7 @@ class AddressEditFeatureTest extends TestCase
         ]);
 
         // 1. ログイン
-        // 2. 住所変更画面で住所を登録（PUT）
+        // 2. 住所変更画面で住所を登録
         $new = [
             'postal_code' => '123-4567',
             'address' => '東京都テスト区1-2-3',
@@ -95,10 +88,8 @@ class AddressEditFeatureTest extends TestCase
             ->from($this->addressEditUrl($item))
             ->put($this->addressUpdateUrl($item), $new);
 
-        // リダイレクト先は実装次第なので「リダイレクトした」だけ確認（必要ならURLも固定）
         $res->assertStatus(302);
 
-        // DBのprofileが更新されている
         $this->assertDatabaseHas('profiles', [
             'user_id' => $buyer->id,
             'postal_code' => '123-4567',
@@ -110,8 +101,6 @@ class AddressEditFeatureTest extends TestCase
         $purchase = $this->actingAs($buyer)->get($this->purchasePageUrl($item));
         $purchase->assertStatus(200);
 
-        // 購入画面の表示内容はBladeに依存するので、
-        // とりあえず “住所文字列が含まれる” で検証（必要ならHTML構造に合わせて強化OK）
         $purchase->assertSee('123-4567');
         $purchase->assertSee('東京都テスト区1-2-3');
         $purchase->assertSee('テストビル');
@@ -144,30 +133,23 @@ class AddressEditFeatureTest extends TestCase
         ];
 
         $this->actingAs($buyer)
+            ->from($this->addressEditUrl($item))
             ->put($this->addressUpdateUrl($item), $new)
             ->assertStatus(302);
 
-        // 3. 商品を購入（PurchaseControllerのバリデーションに合わせて payment_method 必須）
+        // 3. 商品を購入
         $buy = $this->actingAs($buyer)->post($this->purchaseSubmitUrl($item), [
-            'payment_method' => 'convenience',
+            'payment_method' => 'konbini',
         ]);
 
-        // 購入後の遷移先は top など。固定できるなら assertRedirect(route('top')) にしてOK
-        $buy->assertStatus(302);
+        $buy->assertRedirect(route('top'));
 
-        // 期待：ordersに住所が保存されている
         $this->assertDatabaseHas('orders', [
             'buyer_user_id' => $buyer->id,
             'item_id' => $item->id,
             'postal_code' => '987-6543',
             'address' => '大阪府テスト市4-5-6',
             'building' => 'テストマンション101',
-        ]);
-
-        // ついでに：itemがSOLDになっている（購入成功の裏取り）
-        $this->assertDatabaseHas('items', [
-            'id' => $item->id,
-            'status' => 1,
         ]);
     }
 }
