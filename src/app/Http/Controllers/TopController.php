@@ -52,6 +52,7 @@ class TopController extends Controller
         return view('top', [
             'products' => $products,
             'activeTab' => $tab,
+            'keyword'   => $keyword,
         ]);
     }
 }
