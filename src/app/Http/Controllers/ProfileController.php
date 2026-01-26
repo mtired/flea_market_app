@@ -29,11 +29,13 @@ class ProfileController extends Controller
 
         // 購入した商品
         $buyItems = $user->orders()
-            ->with('item')
+            ->where('status', 1)
             ->latest()
+            ->with('item')
             ->get()
-            ->pluck('item')
-            ->filter();
+            ->map->item
+            ->filter()
+            ->values();
 
         // タブ切り替え用（?tab=buy / ?tab=sell )
         $items = $page === 'buy' ? $buyItems : $sellItems;
