@@ -62,11 +62,14 @@ class Item extends Model
     {
         $image = $this->image ?? '';
 
+        if ($image === '') return '';
+
         if (Str::startsWith($image, ['http://', 'https://'])) {
-            return $image; // AWSなどのフルURL
+            return $image;
         }
 
-        // storage（public disk）想定: item_images/xxx.jpg
-        return Storage::url($image); // => /storage/item_images/xxx.jpg
+        // public 配下想定: images/item_images/xxx.jpg
+        // DBには "images/item_images/xxx.jpg" を入れる
+        return '/' . ltrim($image, '/'); // => /images/item_images/xxx.jpg
     }
 }

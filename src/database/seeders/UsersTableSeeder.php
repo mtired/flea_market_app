@@ -18,6 +18,7 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => 'テストユーザー1',
                 'email' => 'user1@test.com',
+                'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -25,6 +26,7 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => 'テストユーザー2',
                 'email' => 'user2@test.com',
+                'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -32,6 +34,7 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => 'テストユーザー3',
                 'email' => 'user3@test.com',
+                'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -39,7 +42,16 @@ class UsersTableSeeder extends Seeder
             [
                 'name' => 'テストユーザー4',
                 'email' => 'user4@test.com',
+                'email_verified_at' => now(),
                 'password' => Hash::make('password'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'test_login',
+                'email' => 'user@test.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('passtest'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
