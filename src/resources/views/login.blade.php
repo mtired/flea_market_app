@@ -8,12 +8,12 @@
 <main class="login">
   <div class="login__inner">
     <h1 class="login__title">ログイン</h1>
-    <form class="login__form" action="/login" method="post">
+    <form class="login__form" action="/login" method="post" novalidate>
       @csrf
 
       <div class="login__group">
         <label class="login__label" for="email">メールアドレス</label>
-        <input class="login__input" id="email" name="email" type="email" value="{{ old('email') }}" />
+        <input class="login__input" id="email" name="email" type="text" value="{{ old('email') }}" />
         @error('email')
           <p class="form-error">{{ $message }}</p>
         @enderror
