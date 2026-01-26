@@ -34,11 +34,16 @@
       <div class="purchase__block">
         <p class="purchase__block-title">支払い方法</p>
 
-        <select class="purchase__select" name="payment_method" form="purchase-form" required>
-            <option value="konbini">コンビニ払い</option>
-            <option value="card">カード払い</option>
+        <select class="purchase__select" name="payment_method" form="purchase-form">
+          <option value="" {{ old('payment_method') === null ? 'selected' : '' }}>選択してください</option>
+          <option value="konbini" {{ old('payment_method') === 'konbini' ? 'selected' : '' }}>コンビニ払い</option>
+          <option value="card" {{ old('payment_method') === 'card' ? 'selected' : '' }}>カード払い</option>
         </select>
       </div>
+
+      @error('payment_method')
+        <p class="form-error">{{ $message }}</p>
+      @enderror
 
       <div class="purchase__line"></div>
 

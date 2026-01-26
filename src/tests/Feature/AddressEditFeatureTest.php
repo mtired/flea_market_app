@@ -13,9 +13,6 @@ class AddressEditFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * プロフィール完了済みユーザー（ProfileをFactoryで作成）
-     */
     private function makeCompletedUser(): User
     {
         $user = User::factory()->create();
@@ -23,6 +20,11 @@ class AddressEditFeatureTest extends TestCase
         Profile::factory()->completed()->create(['user_id' => $user->id]);
 
         return $user;
+    }
+
+    private function profileIdOf(User $user): int
+    {
+        return Profile::where('user_id', $user->id)->firstOrFail()->id;
     }
 
     private function addressEditUrl(Item $item): string
@@ -109,8 +111,12 @@ class AddressEditFeatureTest extends TestCase
             ->put($this->addressUpdateUrl($item), $new)
             ->assertStatus(302);
 
+        // buyerの配送先
+        $addressId = $this->profileIdOf($buyer);
+
         $buy = $this->actingAs($buyer)->post($this->purchaseSubmitUrl($item), [
             'payment_method' => 'konbini',
+            'address_id'     => $addressId,
         ]);
 
         $buy->assertRedirect(route('top'));

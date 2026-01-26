@@ -28,6 +28,11 @@ class PurchaseWithoutStripeTest extends TestCase
         return $user;
     }
 
+    private function profileIdOf(User $user): int
+    {
+        return Profile::where('user_id', $user->id)->firstOrFail()->id;
+    }
+
     /**
      * 購入画面URL（GET）
      */
@@ -78,9 +83,13 @@ class PurchaseWithoutStripeTest extends TestCase
             ->get($this->purchasePageUrl($item))
             ->assertStatus(200);
 
+        // buyerの配送先
+        $addressId = $this->profileIdOf($buyer);
+
         // 購入
         $res = $this->actingAs($buyer)->post($this->purchaseSubmitUrl($item), [
             'payment_method' => 'konbini',
+            'address_id' => $addressId,
         ]);
 
         // トップ画面リダイレクト確認
@@ -117,9 +126,13 @@ class PurchaseWithoutStripeTest extends TestCase
             'name' => 'SOLD表示テスト商品',
         ]);
 
+        // buyerの配送先
+        $addressId = $this->profileIdOf($buyer);
+
         // 購入
         $this->actingAs($buyer)->post($this->purchaseSubmitUrl($item), [
             'payment_method' => 'konbini',
+            'address_id'     => $addressId,
         ])->assertRedirect($this->topUrl());
 
         // DB上でのSOLD確認
@@ -149,12 +162,16 @@ class PurchaseWithoutStripeTest extends TestCase
             'name' => '購入一覧表示テスト商品',
         ]);
 
+        // buyerの配送先
+        $addressId = $this->profileIdOf($buyer);
+
         // 購入
         $this->actingAs($buyer)->post($this->purchaseSubmitUrl($item), [
             'payment_method' => 'konbini',
+            'address_id'     => $addressId,
         ])->assertRedirect($this->topUrl());
 
-          // orders 作成確認
+        // orders 作成確認
         $this->assertDatabaseHas('orders', [
             'buyer_user_id' => $buyer->id,
             'item_id' => $item->id,

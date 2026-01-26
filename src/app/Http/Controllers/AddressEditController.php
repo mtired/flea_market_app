@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Profile;
+use App\Models\Order;
 use App\Http\Requests\AddressEditRequest;
 use App\Models\Item;
 use Illuminate\Http\Request;
@@ -19,9 +20,22 @@ class AddressEditController extends Controller
      */
     public function edit(Item $item)
     {
-        $user = Auth::user();
+        $userId = Auth::id();
 
-        $profile = Profile::where('user_id', $user->id)->first();
+        $order = Order::where('buyer_user_id', $userId)
+            ->where('item_id', $item->id)
+            ->latest()
+            ->first();
+
+        if ($order) {
+            $profile = (object) [
+                'postal_code' => $order->postal_code,
+                'address'     => $order->address,
+                'building'    => $order->building,
+            ];
+        } else {
+            $profile = Profile::where('user_id', $userId)->first();
+        }
 
         return view('address_edit', compact('item', 'profile'));
     }
@@ -31,18 +45,21 @@ class AddressEditController extends Controller
      */
     public function update(AddressEditRequest $request, Item $item)
     {
-        $validated = $request->validate([
-            'postal_code' => ['required', 'string'],
-            'address'     => ['required', 'string'],
-            'building'    => ['nullable', 'string'],
-        ]);
+        $validated = $request->validated();
 
-        Profile::updateOrCreate(
-            ['user_id' => Auth::id()],
-            $validated
+        Order::updateOrCreate(
+            [
+                'buyer_user_id' => Auth::id(),
+                'item_id'       => $item->id,
+            ],
+            [
+                'postal_code' => $validated['postal_code'],
+                'address'     => $validated['address'],
+                'building'    => $validated['building'] ?? null,
+                'status'      => 0
+            ]
         );
 
-        // 購入画面に戻す
         return redirect()
             ->route('purchase.show', ['item' => $item->id])
             ->with('success', '住所を更新しました');

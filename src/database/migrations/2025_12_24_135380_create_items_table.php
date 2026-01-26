@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name', 20);
             $table->string('image', 255);
             $table->foreignId('condition_id')->constrained()->restrictOnDelete();
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->default(0)->comment('0:未購入, 1:購入済み ');;
             $table->string('brand')->nullable();
             $table->string('description');
             $table->unsignedBigInteger('price');
