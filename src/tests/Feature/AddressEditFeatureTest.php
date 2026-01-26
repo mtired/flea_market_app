@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\Condition;
 use App\Models\Item;
+use App\Models\Order;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,11 +20,6 @@ class AddressEditFeatureTest extends TestCase
         Profile::factory()->completed()->create(['user_id' => $user->id]);
 
         return $user;
-    }
-
-    private function profileIdOf(User $user): int
-    {
-        return Profile::where('user_id', $user->id)->firstOrFail()->id;
     }
 
     private function addressEditUrl(Item $item): string
@@ -50,6 +45,7 @@ class AddressEditFeatureTest extends TestCase
     /**
      * ■ID12-1
      * 住所変更画面で登録した住所が購入画面に反映される
+     * （orders に item×buyer で紐づく住所として保存される）
      */
     public function test_id12_1_updated_address_is_reflected_on_purchase_page(): void
     {
@@ -66,19 +62,23 @@ class AddressEditFeatureTest extends TestCase
             'building' => 'テストビル',
         ];
 
+        // 住所更新
         $res = $this->actingAs($buyer)
             ->from($this->addressEditUrl($item))
             ->put($this->addressUpdateUrl($item), $new);
 
         $res->assertStatus(302);
 
-        $this->assertDatabaseHas('profiles', [
-            'user_id' => $buyer->id,
-            'postal_code' => '123-4567',
-            'address' => '東京都テスト区1-2-3',
-            'building' => 'テストビル',
+        $this->assertDatabaseHas('orders', [
+            'buyer_user_id' => $buyer->id,
+            'item_id'       => $item->id,
+            'postal_code'   => '123-4567',
+            'address'       => '東京都テスト区1-2-3',
+            'building'      => 'テストビル',
+            'status'        => 0,
         ]);
 
+        // 購入画面に反映される（showが orders を優先表示）
         $purchase = $this->actingAs($buyer)->get($this->purchasePageUrl($item));
         $purchase->assertStatus(200);
 
@@ -89,7 +89,7 @@ class AddressEditFeatureTest extends TestCase
 
     /**
      * ■ID12-2
-     * 購入した商品に送付先住所が紐づいて登録される（ordersに保存される）
+     * 購入した商品に送付先住所が紐づいて登録される
      */
     public function test_id12_2_address_is_saved_to_order_on_purchase(): void
     {
@@ -111,22 +111,20 @@ class AddressEditFeatureTest extends TestCase
             ->put($this->addressUpdateUrl($item), $new)
             ->assertStatus(302);
 
-        // buyerの配送先
-        $addressId = $this->profileIdOf($buyer);
-
+        // 購入
         $buy = $this->actingAs($buyer)->post($this->purchaseSubmitUrl($item), [
             'payment_method' => 'konbini',
-            'address_id'     => $addressId,
         ]);
 
         $buy->assertRedirect(route('top'));
 
         $this->assertDatabaseHas('orders', [
             'buyer_user_id' => $buyer->id,
-            'item_id' => $item->id,
-            'postal_code' => '987-6543',
-            'address' => '大阪府テスト市4-5-6',
-            'building' => 'テストマンション101',
+            'item_id'       => $item->id,
+            'postal_code'   => '987-6543',
+            'address'       => '大阪府テスト市4-5-6',
+            'building'      => 'テストマンション101',
+            'status'        => 1,
         ]);
     }
 }
