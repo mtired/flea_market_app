@@ -69,6 +69,7 @@ class UserProfileFeatureTest extends TestCase
             'postal_code' => '123-4567',
             'address' => '東京都テスト区1-2-3',
             'building' => 'テストビル',
+            'status' => 1,
         ]);
 
         $profile = Profile::where('user_id', $me->id)->firstOrFail();
