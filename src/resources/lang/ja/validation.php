@@ -15,7 +15,7 @@ return [
     'unique' => 'この:attributeは既に使われています',
 
 
-/*** 特定フィールド × ルールの個別指定（必要になったら追加） ***/
+/*** 特定フィールド × ルールの個別指定 ***/
     'custom' => [
         'password.confirmed' => ':attributeと一致しません'
     ],

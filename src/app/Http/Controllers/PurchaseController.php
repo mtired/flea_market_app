@@ -13,8 +13,6 @@ class PurchaseController extends Controller
 {
     /**
      * 商品購入ページ表示
-     * - itemに紐づく注文(orders)があればその住所を表示
-     * - なければ profile の住所を表示
      */
     public function show(Item $item)
     {
@@ -79,7 +77,7 @@ class PurchaseController extends Controller
                 ->with('success', '購入を受け付けました（コンビニ払い）。');
         }
 
-        // カード払い：Stripe決済へ（ここでは未確定＝pendingのままが基本）
+        // カード払い：Stripe決済へ
         Stripe::setApiKey(config('services.stripe.secret'));
 
         $session = \Stripe\Checkout\Session::create([
