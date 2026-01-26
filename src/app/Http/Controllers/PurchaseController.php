@@ -1,24 +1,40 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\PurchaseRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
 use App\Models\Profile;
 use App\Models\Order;
-use Illuminate\Http\Request;
 use Stripe\Stripe;
-use Stripe\Checkout\Session as CheckoutSession;
 
 class PurchaseController extends Controller
 {
     /**
      * 商品購入ページ表示
+     * - itemに紐づく注文(orders)があればその住所を表示
+     * - なければ profile の住所を表示
      */
     public function show(Item $item)
     {
         $user = Auth::user();
 
-        $address = Profile::where('user_id', $user->id)->first();
+        // itemに紐づく住所があれば優先（最新）
+        $order = Order::where('buyer_user_id', $user->id)
+            ->where('item_id', $item->id)
+            ->latest()
+            ->first();
+
+        if ($order) {
+            $address = (object) [
+                'postal_code' => $order->postal_code,
+                'address'     => $order->address,
+                'building'    => $order->building,
+            ];
+        } else {
+            $address = Profile::where('user_id', $user->id)->first();
+        }
 
         return view('purchase', compact('item', 'address'));
     }
@@ -26,44 +42,49 @@ class PurchaseController extends Controller
     /**
      * 購入処理
      */
-    public function store(Request $request, Item $item)
+    public function store(PurchaseRequest $request, Item $item)
     {
         $user = Auth::user();
-
-        $validated = $request->validate([
-            'payment_method' => ['required', 'in:card,konbini'],
-        ]);
-
+        $validated = $request->validated();
         $method = $validated['payment_method'];
 
-        $profile = Profile::where('user_id', $user->id)->firstOrFail();
+        // 住所変更で先に orders を作っている想定。無ければ profile から作る
+        $order = Order::where('buyer_user_id', $user->id)
+            ->where('item_id', $item->id)
+            ->latest()
+            ->first();
 
-        $order = Order::create([
-            'buyer_user_id' => $user->id,
-            'item_id'       => $item->id,
-            'postal_code'   => $profile->postal_code,
-            'address'       => $profile->address,
-            'building'      => $profile->building,
-        ]);
+        if (!$order) {
+            $profile = Profile::where('user_id', $user->id)->firstOrFail();
 
-        // コンビニ払い (Top画面へ)
+            $order = Order::create([
+                'buyer_user_id' => $user->id,
+                'item_id'       => $item->id,
+                'postal_code'   => $profile->postal_code,
+                'address'       => $profile->address,
+                'building'      => $profile->building,
+                'status'        => 0
+            ]);
+        }
+
+        // コンビニ払い：ここで購入確定
         if ($method === 'konbini') {
-            $item->update(['status' => 1]);
+            $order->update([
+                'status' => 1
+            ]);
+
+            $item->update(['status' => 1]); // SOLD
 
             return redirect()->route('top')
                 ->with('success', '購入を受け付けました（コンビニ払い）。');
         }
 
-        // カード払い (Stripe決済へ)
+        // カード払い：Stripe決済へ（ここでは未確定＝pendingのままが基本）
         Stripe::setApiKey(config('services.stripe.secret'));
 
-        // Stripe APIキー
-        Stripe::setApiKey(config('services.stripe.secret'));
-
-        // Checkout セッション作成
         $session = \Stripe\Checkout\Session::create([
             'mode' => 'payment',
-            'payment_method_types' =>  [$method],
+            'payment_method_types' => [$method],
             'line_items' => [[
                 'quantity' => 1,
                 'price_data' => [
@@ -72,15 +93,13 @@ class PurchaseController extends Controller
                     'product_data' => ['name' => $item->name],
                 ],
             ]],
-
             'success_url' => url('/'),
             'cancel_url'  => route('purchase.show', $item),
         ]);
 
-        // 購入済みフラグ更新
+        $order->update(['status' => 1]);
         $item->update(['status' => 1]);
 
-        // Stripeの決済画面へ
         return redirect()->away($session->url);
     }
 }

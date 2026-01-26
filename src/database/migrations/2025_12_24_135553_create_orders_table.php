@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('item_id')->constrained()->restrictOnDelete();
             $table->foreignId('buyer_user_id')->constrained('users')->restrictOnDelete();
+            $table->tinyInteger('status')->default(0)->comment('0:購入未確定, 1:購入確定, 2:キャンセル');
             $table->string('postal_code', 8);
             $table->string('address', 255);
             $table->string('building', 255)->nullable();

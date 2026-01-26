@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Condition;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\Profile;
@@ -86,7 +85,7 @@ class PurchaseWithoutStripeTest extends TestCase
         // トップ画面リダイレクト確認
         $res->assertRedirect($this->topUrl());
 
-        // 購入確認
+        // 購入確認（SOLD）
         $this->assertDatabaseHas('items', [
             'id' => $item->id,
             'status' => 1,
@@ -95,10 +94,11 @@ class PurchaseWithoutStripeTest extends TestCase
         // DB保存確認
         $this->assertDatabaseHas('orders', [
             'buyer_user_id' => $buyer->id,
-            'item_id' => $item->id,
-            'postal_code' => '123-4567',
-            'address' => '東京都テスト区1-2-3',
-            'building' => 'テストビル',
+            'item_id'       => $item->id,
+            'postal_code'   => '123-4567',
+            'address'       => '東京都テスト区1-2-3',
+            'building'      => 'テストビル',
+            'status'        => 1,
         ]);
     }
 
@@ -111,7 +111,6 @@ class PurchaseWithoutStripeTest extends TestCase
         $buyer = $this->makeCompletedUser();
         $seller = $this->makeCompletedUser();
 
-        // Topで表示確認したいので商品名を固定
         $item = Item::factory()->create([
             'user_id' => $seller->id,
             'name' => 'SOLD表示テスト商品',
@@ -154,10 +153,11 @@ class PurchaseWithoutStripeTest extends TestCase
             'payment_method' => 'konbini',
         ])->assertRedirect($this->topUrl());
 
-          // orders 作成確認
+        // orders 作成確認
         $this->assertDatabaseHas('orders', [
             'buyer_user_id' => $buyer->id,
-            'item_id' => $item->id,
+            'item_id'       => $item->id,
+            'status'        => 1,
         ]);
 
         // 商品一覧確認
