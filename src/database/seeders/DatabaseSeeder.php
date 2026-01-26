@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(LikesSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(ItemCategorySeeder::class);
+        $this->call(ProfilesTableSeeder::class);
     }
 }
