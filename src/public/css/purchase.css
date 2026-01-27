@@ -1,0 +1,288 @@
+.purchase {
+    width: 100%;
+}
+
+.purchase__inner {
+    width: 92%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 70px 0 80px;
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+.purchase__left {
+    flex: 1;
+    min-width: 0;
+}
+
+/* 商品 */
+.purchase__item {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+}
+
+.purchase__thumb {
+    width: 177.53px;
+    height: 177.53px;
+    flex: 0 0 auto;
+}
+
+.purchase__img {
+    width: 177.53px;
+    height: 177.53px;
+    object-fit: cover;
+    display: block;
+}
+
+.purchase__img-placeholder {
+    width: 177.53px;
+    height: 177.53px;
+    background: #d9d9d9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-size: 16px;
+}
+
+.purchase__item-info {
+    padding-top: 6px;
+}
+
+.purchase__item-name {
+    font-size: 30px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0 0 20px;
+    line-height: 1.2;
+}
+
+.purchase__item-price {
+    font-size: 27px;
+    font-weight: 400;
+    color: #000000;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.purchase__line {
+    height: 1px;
+    background: #000000;
+    opacity: 0.3;
+    margin: 28px 0;
+}
+
+.purchase__block {
+    padding: 6px 0;
+}
+
+.purchase__block-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0 0 14px;
+}
+
+.purchase__select {
+    width: 265px;
+    height: 31px;
+    border: 1px solid #5f5f5f;
+    border-radius: 4px;
+    padding: 0 12px;
+    background: #ffffff;
+    color: #5f5f5f;
+    font-size: 12px;
+    font-weight: 600;
+    outline: none;
+}
+
+.purchase__select:focus {
+    border-color: #5599eb;
+}
+
+.purchase__select option {
+    font-size: 12px;
+    font-weight: 600;
+    color: #eaeaea;
+    background: #636769;
+    border: 1.5px solid #b1b1b1;
+    border-radius: 5px;
+}
+
+/* 配送先 */
+.purchase__address-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.purchase__address-link {
+    font-size: 20px;
+    font-weight: 400;
+    color: #0073cc;
+    text-decoration: none;
+}
+
+.purchase__address-link:hover {
+    text-decoration: underline;
+}
+
+.purchase__address-body {
+    margin-top: 10px;
+}
+
+.purchase__address-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: #000000;
+    margin: 0 0 10px;
+}
+
+/* 小計 */
+.purchase__right {
+    width: 460px;
+    flex: 0 0 auto;
+}
+
+.purchase__summary {
+    border: 1px solid #000000;
+}
+
+.purchase__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 26px;
+    gap: 20px;
+}
+
+.purchase__row-label {
+    font-size: 20px;
+    font-weight: 400;
+    color: #000000;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.purchase__row-value {
+    font-size: 20px;
+    font-weight: 400;
+    color: #000000;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.purchase__row-yen {
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 20px;
+    font-weight: 400;
+    color: #000000;
+}
+
+.purchase__summary-line {
+    height: 1px;
+    background: #000000;
+    opacity: 0.3;
+}
+
+.purchase__row-method {
+    font-size: 24px;
+    font-weight: 400;
+    color: #000000;
+    margin: 0;
+    white-space: normal;
+}
+
+/* 購入ボタン */
+.purchase__btn {
+    width: 440px;
+    height: 60px;
+    border: none;
+    border-radius: 5px;
+    background: #ff5555;
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 700;
+    cursor: pointer;
+    display: block;
+    margin: 50px auto 0;
+}
+
+.purchase__btn:hover {
+    opacity: 0.9;
+}
+
+/* エラーメッセージ */
+.form-error {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #e00;
+}
+
+.error-box {
+    padding: 12px;
+    border: 1px solid #e00;
+}
+
+/* ===============================
+  タブレット（768–850px）
+================================*/
+@media (min-width: 768px) and (max-width: 850px) {
+    /* 右カラムの幅を細く */
+    .purchase__right {
+        width: 340px;
+        margin: 0 auto;
+    }
+
+    .purchase__summary {
+        width: 100%;
+    }
+
+    .purchase__row {
+        padding: 10px 14px;
+        gap: 10px;
+    }
+
+    .purchase__item-name {
+        font-size: 20px;
+        margin-bottom: 8px;
+        line-height: 1.25;
+    }
+
+    .purchase__item-price {
+        font-size: 18px;
+        line-height: 1.2;
+    }
+
+    .purchase__row-label,
+    .purchase__row-value {
+        font-size: 15px;
+        line-height: 1.2;
+    }
+
+    .purchase__row-yen {
+        margin-right: 6px;
+        font-size: 15px;
+        line-height: 1.2;
+    }
+
+    .purchase__row-method {
+        font-size: 15px;
+        line-height: 1.2;
+    }
+
+    .purchase__summary-line {
+        opacity: 0.2;
+    }
+
+    .purchase__btn {
+        width: 100%;
+        height: 52px;
+        font-size: 15px;
+        margin-top: 22px;
+    }
+}

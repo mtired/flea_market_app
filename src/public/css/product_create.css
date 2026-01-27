@@ -1,0 +1,271 @@
+.product-create {
+    padding: 40px 0 80px;
+}
+
+.product-create__inner {
+    width: 680px;
+    margin: 0 auto;
+}
+
+.product-create__title {
+    font-size: 44px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+.product-create__form {
+    width: 100%;
+}
+
+/* 出品セクション */
+.product-create__section {
+    margin-top: 34px;
+}
+
+.product-create__section-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #5f5f5f;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #5f5f5f;
+    margin-bottom: 18px;
+}
+
+.product-create__block {
+    margin-bottom: 20px;
+}
+
+.product-create__label {
+    font-size: 24px;
+    font-weight: 700;
+    color: #000000;
+    margin-bottom: 10px;
+}
+
+/* 画像 */
+.product-create__image-area {
+    width: 680px;
+    height: 150px;
+    border-radius: 4px;
+    border: 1px dashed #5f5f5f;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.product-create__file-input {
+    display: none;
+}
+
+.product-create__file-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 165px;
+    height: 43.46px;
+    border-radius: 10px;
+    border: 2px solid #ff5555;
+    color: #ff5655;
+    font-size: 16px;
+    font-weight: 700;
+    background: transparent;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.product-create__preview {
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* カテゴリー */
+.product-create__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 10px;
+}
+
+.product-create__category-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 未選択 */
+.product-create__category-pill {
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 200px;
+    border: 2px solid #ff5655;
+    background: #d9d9d900;
+    color: #ff5655;
+    font-size: 15px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* 選択時の色 */
+.product-create__category-input:checked + .product-create__category-pill {
+    background: #ff5655;
+    color: #ffffff;
+}
+
+.product-create__select {
+    width: 680px;
+    height: 45px;
+    border-radius: 4px;
+    border: 1px solid #5f5f5f;
+    font-size: 16px;
+    font-weight: 700;
+    color: #5f5f5f;
+    padding: 0 12px;
+    background: #ffffff;
+}
+
+.product-create__input {
+    width: 680px;
+    height: 45px;
+    border-radius: 4px;
+    border: 1px solid #5f5f5f;
+    font-size: 16px;
+    padding: 0 12px;
+}
+
+.product-create__textarea {
+    width: 680px;
+    height: 125px;
+    border-radius: 4px;
+    border: 1px solid #5f5f5f;
+    font-size: 16px;
+    padding: 10px 12px;
+    resize: vertical;
+}
+
+.product-create__price {
+    width: 680px;
+    height: 45px;
+    border-radius: 4px;
+    border: 1px solid #5f5f5f;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+}
+
+.product-create__yen {
+    font-size: 24px;
+    font-weight: 700;
+    color: #000000;
+}
+
+.product-create__price-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    font-size: 24px;
+    font-weight: 700;
+    color: #5f5f5f;
+}
+
+/* 出品ボタン */
+.product-create__submit {
+    width: 680px;
+    height: 60px;
+    border: none;
+    border-radius: 5px;
+    background: #ff5555;
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 18px;
+}
+
+/* error */
+.form-error {
+    margin-top: 8px;
+    color: #ff3333;
+    font-size: 14px;
+}
+
+/* ===============================
+   タブレット（768–850px）
+================================*/
+@media (min-width: 768px) and (max-width: 850px) {
+    .product-create {
+        padding: 28px 16px 60px;
+    }
+
+    .product-create__inner {
+        width: 100%;
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+    .product-create__title {
+        font-size: 34px;
+        margin-bottom: 22px;
+    }
+
+    .product-create__section-title {
+        font-size: 24px;
+    }
+
+    .product-create__label {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .product-create__image-area,
+    .product-create__select,
+    .product-create__input,
+    .product-create__textarea,
+    .product-create__price,
+    .product-create__submit {
+        width: 100%;
+    }
+
+    .product-create__image-area {
+        height: 140px;
+    }
+
+    .product-create__textarea {
+        height: 120px;
+    }
+
+    .product-create__yen {
+        font-size: 20px;
+    }
+
+    .product-create__price-input {
+        font-size: 20px;
+    }
+
+    .product-create__submit {
+        height: 56px;
+        font-size: 22px;
+    }
+
+    .product-create__categories {
+        gap: 8px 8px;
+    }
+
+    .product-create__category-pill {
+        height: 30px;
+        padding: 0 12px;
+        font-size: 14px;
+    }
+}

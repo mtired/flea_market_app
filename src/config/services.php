@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'mail_inbox_url' => env('MAIL_INBOX_URL', 'http://localhost:8025'),
+
+    'stripe' => [
+    'key' => env('STRIPE_KEY'),
+    'secret' => env('STRIPE_SECRET'),
+    'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+],
 ];
