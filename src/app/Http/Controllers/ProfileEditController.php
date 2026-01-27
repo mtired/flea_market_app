@@ -2,20 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Profile;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProfileEditRequest;
-use Symfony\Component\HttpKernel\Profiler\Profile as ProfilerProfile;
 
 class ProfileEditController extends Controller
 {
-    public function index()
-    {
-        return view('profile_edit');
-    }
-
     /**
      * プロフィール編集ページ表示
      */

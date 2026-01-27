@@ -62,11 +62,28 @@ class Item extends Model
     {
         $image = $this->image ?? '';
 
-        if (Str::startsWith($image, ['http://', 'https://'])) {
-            return $image; // AWSなどのフルURL
+        if ($image === '') {
+            return '';
         }
 
-        // storage（public disk）想定: item_images/xxx.jpg
-        return Storage::url($image); // => /storage/item_images/xxx.jpg
+        // 1) 外部URL（S3等）
+        if (Str::startsWith($image, ['http://', 'https://'])) {
+            return $image;
+        }
+
+        // 2) すでに / から始まる絶対パス（/images/... や /storage/...）
+        if (Str::startsWith($image, '/')) {
+            return $image;
+        }
+
+        // 3) ユーザーアップロード想定（storage/app/public に保存するパス）
+        // 例: item_images/xxx.jpg や profile_images/xxx.png
+        if (Str::startsWith($image, ['item_images/', 'profile_images/'])) {
+            return Storage::url($image); // => /storage/item_images/xxx.jpg
+        }
+
+        // 4) ダミー画像想定（public 配下）
+        // 例: images/item_images/sample1.jpg
+        return '/' . ltrim($image, '/'); // => /images/item_images/sample1.jpg
     }
 }

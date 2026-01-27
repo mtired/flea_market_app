@@ -1,120 +1,120 @@
 .address-edit {
-  padding: 60px 20px 100px;
+    padding: 60px 20px 100px;
 }
 
 .address-edit__inner {
-  max-width: 680px;
-  margin: 0 auto;
+    max-width: 680px;
+    margin: 0 auto;
 }
 
 .address-edit__title {
-  font-size: 36px;
-  font-weight: 700;
-  color: #000000;
-  text-align: center;
-  margin: 40px 0 60px;
+    font-size: 36px;
+    font-weight: 700;
+    color: #000000;
+    text-align: center;
+    margin: 40px 0 60px;
 }
 
 .address-edit__form {
-  display: flex;
-  flex-direction: column;
-  gap: 42px;
+    display: flex;
+    flex-direction: column;
+    gap: 42px;
 }
 
 .address-edit__group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .address-edit__label {
-  font-size: 24px;
-  font-weight: 700;
-  color: #000000;
+    font-size: 24px;
+    font-weight: 700;
+    color: #000000;
 }
 
 .address-edit__input {
-  width: 100%;
-  height: 45px;
-  border-radius: 4px;
-  border: 1px solid #5F5F5F;
-  padding: 0 14px;
-  font-size: 16px;
-  color: #000000;
-  outline: none;
-  box-sizing: border-box;
+    width: 100%;
+    height: 45px;
+    border-radius: 4px;
+    border: 1px solid #5f5f5f;
+    padding: 0 14px;
+    font-size: 16px;
+    color: #000000;
+    outline: none;
+    box-sizing: border-box;
 }
 
 .address-edit__input:focus {
-  border-color: #000000;
+    border-color: #000000;
 }
 
 .address-edit__button {
-  width: 100%;
-  height: 60px;
-  border-radius: 5px;
-  border: none;
-  background: #FF5555;
-  color: #FFFFFF;
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 18px;
+    width: 100%;
+    height: 60px;
+    border-radius: 5px;
+    border: none;
+    background: #ff5555;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 18px;
 }
 
 .address-edit__button:hover {
-  opacity: 0.9;
+    opacity: 0.9;
 }
 
-/* バリデーション表示（既存の共通があれば不要） */
+/* バリデーション表示*/
 .form-error {
-  font-size: 14px;
-  color: #ff3333;
-  margin: 6px 0 0;
+    font-size: 14px;
+    color: #ff3333;
+    margin: 6px 0 0;
 }
 
 /* ===============================
    タブレット（768–850px）
 ================================*/
 @media (min-width: 768px) and (max-width: 850px) {
-  .address-edit {
-    padding: 40px 16px 60px;
-  }
+    .address-edit {
+        padding: 40px 16px 60px;
+    }
 
-  .address-edit__inner {
-    max-width: 620px;
-  }
+    .address-edit__inner {
+        max-width: 620px;
+    }
 
-  .address-edit__title {
-    font-size: 28px;
-    margin: 24px 0 40px;
-  }
+    .address-edit__title {
+        font-size: 28px;
+        margin: 24px 0 40px;
+    }
 
-  .address-edit__form {
-    gap: 28px;
-  }
+    .address-edit__form {
+        gap: 28px;
+    }
 
-  .address-edit__group {
-    gap: 8px;
-  }
+    .address-edit__group {
+        gap: 8px;
+    }
 
-  .address-edit__label {
-    font-size: 20px;
-  }
+    .address-edit__label {
+        font-size: 20px;
+    }
 
-  .address-edit__input {
-    height: 42px;
-    font-size: 15px;
-    padding: 0 12px;
-  }
+    .address-edit__input {
+        height: 42px;
+        font-size: 15px;
+        padding: 0 12px;
+    }
 
-  .address-edit__button {
-    height: 54px;
-    font-size: 18px;
-    margin-top: 12px;
-  }
+    .address-edit__button {
+        height: 54px;
+        font-size: 18px;
+        margin-top: 12px;
+    }
 
-  .form-error {
-    font-size: 13px;
-  }
+    .form-error {
+        font-size: 13px;
+    }
 }

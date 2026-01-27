@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,60 +13,52 @@
 </head>
 
 <body>
-<header class="header">
-  <div class="header__inner">
+  <header class="header">
+    <div class="header__inner">
 
-    {{-- ロゴ --}}
-    <a href="/" class="header__logo-link">
-      <img
-        src="{{ asset('images/COACHTECHヘッダーロゴ.png') }}"
-        alt="COACHTECH"
-        class="header__logo"
-      />
-    </a>
+      {{-- ロゴ --}}
+      <a href="/" class="header__logo-link">
+        <img src="{{ asset('images/COACHTECHヘッダーロゴ.png') }}" alt="COACHTECH" class="header__logo" />
+      </a>
 
-    @unless (request()->is('login') || request()->is('register'))
-    {{-- 検索 --}}
-    <form class="header__search" action="{{ url('/') }}" method="get">
-      {{-- 今開いてるタブを保持（recommend / mylist） --}}
-      <input type="hidden" name="tab" value="{{ request('tab', 'recommend') }}">
+      @unless (request()->is('login') || request()->is('register'))
+        {{-- 検索 --}}
+        <form class="header__search" action="{{ url('/') }}" method="get">
+          {{-- 今開いてるタブを保持（recommend / mylist） --}}
+          <input type="hidden" name="tab" value="{{ request('tab', 'recommend') }}">
 
-      <input
-        class="header__search-input"
-        type="text"
-        name="keyword"
-        value="{{ request('keyword') }}"
-        placeholder="なにをお探しですか？"
-      >
-    </form>
-
-    {{-- 右側メニュー --}}
-    <nav class="header__nav">
-      @auth
-        <form action="/logout" method="post">
-          @csrf
-          <button class="header__nav-text" type="submit">ログアウト</button>
+          <input class="header__search-input" type="text" name="keyword" value="{{ request('keyword') }}"
+            placeholder="なにをお探しですか？">
         </form>
-      @endauth
 
-        <a href="/mypage" class="header__nav-text">マイページ</a>
+        {{-- 右側メニュー --}}
+        <nav class="header__nav">
+          @auth
+            <form action="/logout" method="post">
+              @csrf
+              <button class="header__nav-text" type="submit">ログアウト</button>
+            </form>
+          @endauth
 
-        <a href="/sell" class="header__sell-button">
-          出品
-        </a>
-      
+          <a href="/mypage" class="header__nav-text">マイページ</a>
 
-      @guest
-        <a href="/login" class="header__nav-text">ログイン</a>
-      @endguest
-    </nav>
-    @endunless
-    
-  </div>
-</header>
+          <a href="/sell" class="header__sell-button">
+            出品
+          </a>
 
-<main>
-  @yield('content')
-</main>
+
+          @guest
+            <a href="/login" class="header__nav-text">ログイン</a>
+          @endguest
+        </nav>
+      @endunless
+
+    </div>
+  </header>
+
+  <main>
+    @yield('content')
+  </main>
 </body>
+
 </html>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Comment;
 use App\Models\Like;
@@ -11,11 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductDetailController extends Controller
 {
-    public function index()
-    {
-        return view('product_detail');
-    }
-
     /**
      * 商品詳細ページ表示
      */
