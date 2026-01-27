@@ -17,7 +17,6 @@
     margin: 0 0 40px;
 }
 
-/* form */
 .register__form {
     width: 100%;
 }
@@ -51,7 +50,7 @@
     height: 58px;
 }
 
-/* button */
+/* 登録ボタン */
 .register__actions {
     margin-top: 40px;
     display: flex;
@@ -75,7 +74,7 @@
     opacity: 0.9;
 }
 
-/* login link */
+/* ログインリンク */
 .register__login {
     margin-top: 16px;
     text-align: center;
@@ -94,7 +93,7 @@
 
 /* エラーメッセージ */
 .is-invalid {
-    border: 1px solid #e00; 
+    border: 1px solid #e00;
 }
 
 .form-error {
@@ -103,7 +102,7 @@
     color: #e00;
 }
 
-.error-box  {
+.error-box {
     padding: 12px;
     border: 1px solid #e00;
 }
@@ -112,49 +111,49 @@
    タブレット（768–850px）
 ================================*/
 @media (min-width: 768px) and (max-width: 850px) {
-  .register {
-    padding: 40px 16px;
-  }
+    .register {
+        padding: 40px 16px;
+    }
 
-  .register__inner {
-    max-width: 620px;
-  }
+    .register__inner {
+        max-width: 620px;
+    }
 
-  .register__title {
-    font-size: 30px;
-    margin-bottom: 28px;
-  }
+    .register__title {
+        font-size: 30px;
+        margin-bottom: 28px;
+    }
 
-  .register__label {
-    font-size: 20px;
-    margin-bottom: 8px;
-  }
+    .register__label {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
 
-  .register__group {
-    margin-bottom: 20px;
-  }
+    .register__group {
+        margin-bottom: 20px;
+    }
 
-  .register__input {
-    height: 52px;
-    font-size: 16px;
-  }
+    .register__input {
+        height: 52px;
+        font-size: 16px;
+    }
 
-  .register__group:nth-of-type(2) .register__input,
-  .register__group:nth-of-type(4) .register__input {
-    height: 52px;
-  }
+    .register__group:nth-of-type(2) .register__input,
+    .register__group:nth-of-type(4) .register__input {
+        height: 52px;
+    }
 
-  .register__actions {
-    margin-top: 28px;
-  }
+    .register__actions {
+        margin-top: 28px;
+    }
 
-  .register__button {
-    height: 56px;
-    font-size: 22px;
-    margin-top: 32px; 
-  }
+    .register__button {
+        height: 56px;
+        font-size: 22px;
+        margin-top: 32px;
+    }
 
-  .register__login-link {
-    font-size: 18px;
-  }
+    .register__login-link {
+        font-size: 18px;
+    }
 }

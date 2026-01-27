@@ -8,7 +8,6 @@
   padding: 40px 24px 80px;
 }
 
-/* 上段：画像 + 右カラム */
 .product-detail__top {
   display: flex;
   gap: 70px;
@@ -21,7 +20,7 @@
   width: 600px;
   height: 600px;
   flex: 0 0 auto;
-  background: #D9D9D9; /* 画像が無い時用 */
+  background: #D9D9D9; // 画像が無い時用
 }
 
 .product-detail__image {
@@ -82,20 +81,19 @@
   margin-left: 40px;
 }
 
-/* form / div を同じ見た目にする */
 .product-detail__meta-like,
 .product-detail__meta-item {
   display: flex;
-  flex-direction: column;   /* ← 縦並び */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4px;
 }
 
-/* いいねボタンのデフォルト装飾を完全に消す */
+/* いいねボタンのデフォルト装飾削除 */
 .like-button {
   display: flex;
-  flex-direction: column;   /* ← 縦並び */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 
@@ -114,10 +112,9 @@
 
 /* いいねだけ少し広げる */
 .product-detail__meta-like .like-button {
-  gap: 4px;   /* ← コメントより少し広め */
+  gap: 4px;
 }
 
-/* フォーカス時の変な枠を消す */
 .like-button:focus {
   outline: none;
 }
@@ -135,7 +132,7 @@
 
 /* カウント */
 .product-detail__meta-count {
-  font-family: inherit;   /* 親と同じフォント */
+  font-family: inherit;
   font-size: 18px;
   font-weight: 700;
   line-height: 1;
@@ -178,7 +175,7 @@
   font-weight: 400;
   color: #000000;
   margin: 0;
-  white-space: pre-line; /* 改行を反映 */
+  white-space: pre-line;
 }
 
 /* 商品情報 */
@@ -209,7 +206,7 @@
 
 .product-detail__category-pill {
   height: 30px;
-  padding: 0 12px;        /* 余白*/
+  padding: 0 12px;
   border-radius: 15px;
   background: #D9D9D9;
   color: #000000;
@@ -221,9 +218,9 @@
   font-size: 20px;
   font-weight: 400;
 
-  max-width: 100%;        /* はみ出し防止 */
+  max-width: 100%;
   box-sizing: border-box;
-  white-space: nowrap;    /* 1行にしたい場合 */
+  white-space: nowrap;
 }
 
 .product-detail__info-state {
@@ -320,7 +317,7 @@
   color: #000000;
 
   font-size: 20px;
-  font-weight: 300; /* Light */
+  font-weight: 300;
   padding: 14px;
   box-sizing: border-box;
   resize: none;
