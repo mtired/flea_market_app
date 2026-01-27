@@ -16,6 +16,12 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained()->restrictOnDelete();
             $table->foreignId('category_id')->constrained()->restrictOnDelete();
             $table->timestamps();
+
+            // 同じ商品に同じカテゴリを重複登録させないようにする
+            $table->unique(
+                ['item_id', 'category_id'],
+                'item_categories_item_category_unique'
+            );
         });
     }
 

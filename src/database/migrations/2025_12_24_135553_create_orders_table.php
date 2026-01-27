@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('address', 255);
             $table->string('building', 255)->nullable();
             $table->timestamps();
+
+            // 1つの商品は1回しか注文できないようにする
+            $table->unique('item_id', 'orders_item_unique');
         });
     }
 

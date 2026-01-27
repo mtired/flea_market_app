@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained()->restrictOnDelete();
             $table->timestamps();
 
+            // 1ユーザーが同じ商品に重複いいねできないようにする
             $table->unique(['user_id', 'item_id']);
         });
     }
