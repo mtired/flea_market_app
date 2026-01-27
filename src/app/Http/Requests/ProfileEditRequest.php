@@ -26,7 +26,7 @@ class ProfileEditRequest extends FormRequest
             'postal_code' => ['required', 'string', 'regex:/^\d{3}-\d{4}$/', 'max:8'],
             'address' => ['required', 'string', 'max:255'],
             'building' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable']
+            'image' => ['nullable','image', 'mimes:png,jpeg']
         ];
     }
 

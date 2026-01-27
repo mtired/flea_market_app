@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Comment;
-use App\Models\Condition;
 use App\Models\Item;
 use App\Models\Profile;
 use App\Models\User;

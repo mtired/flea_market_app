@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Condition;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\Profile;
