@@ -3,15 +3,22 @@
 ## 環境構築
 
 ### Docker ビルド
+
 docker compose(v2)を使用してください
 
 ```bash
 git clone https://github.com/mtired/flea_market_app.git
+
+cd flea_market_app
 docker compose up -d --build
+
 docker compose exec php bash
+
 composer install
 
-cp .env.example .env # .env の環境変数を適宜変更
+cp .env.example .env
+# .env の環境変数を適宜変更してください。
+# また、Stripe の API キーは各自のテストキーを設定してください。
 
 php artisan key:generate
 php artisan migrate
@@ -20,6 +27,7 @@ php artisan storage:link
 ```
 
 ## 開発環境
+
 ユーザー登録画面：
 http://localhost/register
 
@@ -32,7 +40,11 @@ http://localhost/
 phpMyAdmin：
 http://localhost:8080/
 
+MailHog：
+http://localhost:8025/
+
 ## 使用技術(実行環境)
+
 Laravel：12.43.1
 
 mysql：8.4
@@ -44,11 +56,13 @@ php：8.4.15
 Composer：2.9.2
 
 ## ログインユーザ情報
+
 ユーザ名：test_login
 メールアドレス：user@test.com
 パスワード：passtest
 
 ## 動作について
+
 ■ページ遷移について
 ・公開ページ
 　-トップページ(商品一覧ページ)
@@ -79,12 +93,15 @@ Composer：2.9.2
 　-商品一覧が表示されますが、商品詳細ページに飛ぶことはありません。
 
 ## カード払いでの購入時
+
 カード番号：4242 4242 4242 4242
 有効期限：12/34 (将来の日付)
 CVC：123 (何でも良い)
 
 ## PHP Unitテスト
+
 テスト一括実施コマンド
+
 ```bash
 php artisan test tests/Feature
 ```

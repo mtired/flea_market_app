@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Item;
-use App\Models\Order;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
